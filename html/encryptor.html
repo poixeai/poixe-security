@@ -66,25 +66,82 @@ body{
 .hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
 .brand{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:600;letter-spacing:-.02em}
 .brand svg{color:var(--muted)}
+.hdr-r{display:flex;align-items:center;gap:7px}
 
-/* Key chip — shadcn tag style */
+/* Chip */
 .chip{
   display:inline-flex;align-items:center;gap:5px;
   padding:2px 8px 2px 7px;border-radius:5px;
   font-size:11.5px;font-weight:500;
-  border:1px solid var(--border);
-  background:transparent;color:var(--muted);
-  user-select:none;white-space:nowrap;
-  transition:opacity .15s;cursor:default;
+  border:1px solid var(--border);background:transparent;color:var(--muted);
+  user-select:none;white-space:nowrap;transition:opacity .15s;cursor:default;
   font-family:var(--mono);letter-spacing:.01em;
 }
-.chip.ok{color:var(--ok);border-color:var(--ok-bd);background:var(--ok-bg);cursor:pointer}
-.chip.ok:hover{opacity:.75}
-.chip.err{color:var(--warn);border-color:var(--warn-bd);background:var(--warn-bg);cursor:pointer}
-.chip.err:hover{opacity:.75}
-.chip-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.chip.ok  {color:var(--ok);  border-color:var(--ok-bd); background:var(--ok-bg); cursor:pointer}
+.chip.warn{color:var(--warn);border-color:var(--warn-bd);background:var(--warn-bg);cursor:pointer}
+.chip.err {color:var(--warn);border-color:var(--warn-bd);background:var(--warn-bg);cursor:pointer}
+.chip.ok:hover,.chip.warn:hover,.chip.err:hover{opacity:.75}
+.chip-icon{display:flex;align-items:center;flex-shrink:0}
+.chip-dot{width:6px;height:6px;border-radius:50%;background:currentColor;display:block}
 .chip.loading .chip-dot{animation:blink 1.4s ease-in-out infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* Gear */
+.gear-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:26px;height:26px;border-radius:5px;
+  border:1px solid transparent;background:transparent;
+  color:var(--subtle);cursor:pointer;transition:border-color .12s,color .12s;outline:none;flex-shrink:0;
+}
+.gear-btn:hover,.gear-btn.on{border-color:var(--border);color:var(--muted)}
+
+/* Config panel */
+.key-cfg{border-top:1px solid var(--border);padding:14px 0 6px;margin-bottom:18px}
+
+/* Active banner */
+.cfg-banner{
+  display:flex;align-items:center;gap:7px;
+  padding:8px 11px;border-radius:6px;margin-bottom:14px;
+  font-size:12px;border:1px solid var(--border);background:var(--bg);color:var(--muted);
+}
+.cfg-banner.ok  {color:var(--ok); border-color:var(--ok-bd); background:var(--ok-bg)}
+.cfg-banner.warn{color:var(--warn);border-color:var(--warn-bd);background:var(--warn-bg)}
+.cfg-banner-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.cfg-banner-label{flex-shrink:0;font-size:11px;opacity:.8;margin-right:1px}
+.cfg-banner-txt{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--mono)}
+
+/* Tabs — 3 options */
+.cfg-tabs{
+  display:flex;gap:2px;margin-bottom:14px;
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:7px;padding:3px;
+}
+.cfg-tab{
+  display:flex;align-items:center;gap:5px;flex:1;justify-content:center;
+  padding:4px 10px;border-radius:5px;border:none;background:transparent;
+  color:var(--muted);font-size:13px;font-family:inherit;cursor:pointer;
+  transition:background .12s,color .12s;outline:none;font-weight:500;white-space:nowrap;
+}
+.cfg-tab.active{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+.cfg-tab-dot{
+  width:5px;height:5px;border-radius:50%;flex-shrink:0;
+  background:var(--ok);opacity:0;transition:opacity .15s;
+}
+.cfg-tab-dot.on{opacity:1}
+.cfg-tab-dot.warn-src{background:var(--warn)}
+
+/* Official panel */
+.cfg-official{
+  padding:12px 14px;border-radius:var(--r);
+  border:1px solid var(--border);background:var(--bg);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.cfg-official-url{font-size:12.5px;color:var(--muted);font-family:var(--mono)}
+.cfg-official-url a{color:inherit;text-decoration:none}
+.cfg-official-url a:hover{color:var(--text)}
+
+.cfg-panel{padding-top:2px}
+.cfg-row{display:flex;align-items:center;gap:8px}
 
 /* Form groups */
 .fg{margin-bottom:20px}
@@ -93,17 +150,14 @@ label{display:block;font-size:14px;font-weight:500;margin-bottom:8px;line-height
 .label-note{font-size:12.5px;font-weight:400;color:var(--muted)}
 .hint{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.5}
 
-/* Text input */
 .inp{
   display:block;width:100%;background:var(--card);border:1px solid var(--border);
   border-radius:var(--r);color:var(--text);font-size:14px;font-family:inherit;
-  outline:none;padding:10px 13px;height:42px;
-  transition:border-color .15s,box-shadow .15s;
+  outline:none;padding:10px 13px;height:42px;transition:border-color .15s,box-shadow .15s;
 }
 .inp:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--focus)}
 .inp::placeholder{color:var(--subtle)}
 
-/* Key textarea */
 .kta{
   display:block;width:100%;background:var(--card);border:1px solid var(--border);
   border-radius:var(--r);color:var(--text);font-size:13px;font-family:var(--mono);
@@ -120,14 +174,12 @@ label{display:block;font-size:14px;font-weight:500;margin-bottom:8px;line-height
   width:100%;height:42px;padding:0 13px;
   background:var(--card);border:1px solid var(--border);border-radius:var(--r);
   color:var(--text);font-size:14px;font-family:inherit;
-  cursor:pointer;outline:none;text-align:left;
-  transition:border-color .15s,box-shadow .15s;
+  cursor:pointer;outline:none;text-align:left;transition:border-color .15s,box-shadow .15s;
 }
 .csel-btn:focus,.csel.open .csel-btn{border-color:var(--primary);box-shadow:0 0 0 3px var(--focus)}
 .csel-val{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .csel-arr{flex-shrink:0;color:var(--muted);transition:transform .2s}
 .csel.open .csel-arr{transform:rotate(180deg)}
-
 .csel-dd{
   position:absolute;top:calc(100% + 5px);left:0;right:0;
   background:var(--card);border:1px solid var(--border);border-radius:10px;
@@ -140,18 +192,13 @@ label{display:block;font-size:14px;font-weight:500;margin-bottom:8px;line-height
 .csel-dd::-webkit-scrollbar{width:6px}
 .csel-dd::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 .csel.open .csel-dd{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
-
 .co{
   display:flex;align-items:center;justify-content:space-between;
-  padding:9px 12px;font-size:14px;cursor:pointer;
-  transition:background .1s;user-select:none;
+  padding:9px 12px;font-size:14px;cursor:pointer;transition:background .1s;user-select:none;
 }
 .co:hover{background:var(--hover)}
 .co.sel{font-weight:500}
-.co-chk{
-  width:14px;height:14px;flex-shrink:0;margin-left:8px;
-  color:var(--primary);visibility:hidden;
-}
+.co-chk{width:14px;height:14px;flex-shrink:0;margin-left:8px;color:var(--primary);visibility:hidden}
 .co.sel .co-chk{visibility:visible}
 
 /* File upload */
@@ -183,18 +230,16 @@ label{display:block;font-size:14px;font-weight:500;margin-bottom:8px;line-height
 }
 .out-title{font-size:13px;font-weight:500;color:var(--muted);flex:1}
 .out-hdr-btns{display:flex;align-items:center;gap:6px}
-
 .cbtn{
   display:inline-flex;align-items:center;gap:5px;
   padding:4px 10px;border:1px solid var(--border);border-radius:6px;
   background:transparent;color:var(--muted);font-size:12px;
-  font-family:inherit;cursor:pointer;
-  transition:border-color .12s,color .12s;outline:none;white-space:nowrap;
+  font-family:inherit;cursor:pointer;transition:border-color .12s,color .12s;outline:none;white-space:nowrap;
 }
 .cbtn:hover{border-color:var(--primary);color:var(--text)}
 .cbtn.ok{color:var(--ok);border-color:var(--ok-bd)}
-
-/* Single output */
+.cbtn:disabled{opacity:.4;cursor:not-allowed}
+.cbtn:disabled:hover{border-color:var(--border);color:var(--muted)}
 .out-single{
   padding:14px 16px;background:var(--bg);font-family:var(--mono);
   font-size:12.5px;line-height:1.7;color:var(--text);
@@ -205,25 +250,16 @@ label{display:block;font-size:14px;font-weight:500;margin-bottom:8px;line-height
 .out-single::-webkit-scrollbar{width:6px}
 .out-single::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 .out-single.err-text{color:var(--err)}
-
-/* Batch rows */
 .out-rows{max-height:360px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
 .out-rows::-webkit-scrollbar{width:6px}
 .out-rows::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 .out-row{
   display:flex;align-items:flex-start;gap:10px;
-  padding:10px 14px;border-bottom:1px solid var(--border);
-  background:var(--bg);
+  padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg);
 }
 .out-row:last-child{border-bottom:none}
-.out-n{
-  font-size:11px;color:var(--subtle);min-width:18px;padding-top:3px;
-  flex-shrink:0;font-variant-numeric:tabular-nums;
-}
-.out-row-txt{
-  flex:1;font-family:var(--mono);font-size:12.5px;line-height:1.65;
-  word-break:break-all;white-space:pre-wrap;margin:0;color:var(--text);
-}
+.out-n{font-size:11px;color:var(--subtle);min-width:18px;padding-top:3px;flex-shrink:0;font-variant-numeric:tabular-nums}
+.out-row-txt{flex:1;font-family:var(--mono);font-size:12.5px;line-height:1.65;word-break:break-all;white-space:pre-wrap;margin:0;color:var(--text)}
 .row-cbtn{
   flex-shrink:0;padding:3px 9px;border:1px solid var(--border);border-radius:5px;
   background:transparent;color:var(--muted);font-size:11.5px;font-family:inherit;
@@ -241,6 +277,31 @@ label{display:block;font-size:14px;font-weight:500;margin-bottom:8px;line-height
 .foot a:hover{color:var(--text)}
 .foot-sep{opacity:.5}
 
+/* Toast */
+.toast-rack{
+  position:fixed;bottom:20px;right:20px;
+  display:flex;flex-direction:column;gap:8px;
+  z-index:9999;pointer-events:none;
+  max-width:320px;width:calc(100vw - 32px);
+}
+.toast{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:12px 14px;border-radius:9px;
+  border:1px solid var(--border);background:var(--card);
+  box-shadow:0 4px 16px rgba(0,0,0,0.12),0 1px 4px rgba(0,0,0,0.06);
+  line-height:1.45;pointer-events:auto;
+  animation:toastIn .2s cubic-bezier(.22,.1,.36,1) forwards;
+}
+.toast.out{animation:toastOut .18s ease forwards}
+.toast-ico{flex-shrink:0;margin-top:1px}
+.toast-body{flex:1;min-width:0}
+.toast-title{font-size:13px;font-weight:600;margin-bottom:2px}
+.toast-msg{font-size:12.5px;color:var(--muted);word-break:break-word}
+.toast.t-err  .toast-ico,.toast.t-err  .toast-title{color:var(--err)}
+.toast.t-warn .toast-ico,.toast.t-warn .toast-title{color:var(--warn)}
+@keyframes toastIn {from{opacity:0;transform:translateX(16px) scale(.97)}to{opacity:1;transform:translateX(0) scale(1)}}
+@keyframes toastOut{from{opacity:1;transform:translateX(0)}         to{opacity:0;transform:translateX(16px)}}
+
 .hidden{display:none!important}
 </style>
 </head>
@@ -255,9 +316,66 @@ label{display:block;font-size:14px;font-weight:500;margin-bottom:8px;line-height
       </svg>
       Key Encryptor
     </div>
-    <div class="chip loading" id="chip" onclick="onChipClick()">
-      <span class="chip-dot"></span>
-      <span id="chipText">Loading…</span>
+    <div class="hdr-r">
+      <div class="chip loading" id="chip" onclick="onChipClick()">
+        <span class="chip-icon" id="chipIcon"><span class="chip-dot"></span></span>
+        <span id="chipText">Loading…</span>
+      </div>
+      <button class="gear-btn" id="gearBtn" type="button" onclick="toggleKeyConfig()" title="Configure key source">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="key-cfg hidden" id="keyCfg">
+    <!-- Which source is currently loaded -->
+    <div class="cfg-banner hidden" id="cfgBanner">
+      <span class="cfg-banner-dot"></span>
+      <span class="cfg-banner-label">In use:</span>
+      <span class="cfg-banner-txt" id="cfgBannerTxt"></span>
+    </div>
+
+    <!-- Three mutually exclusive source tabs -->
+    <div class="cfg-tabs">
+      <button class="cfg-tab" id="tabOfficial" type="button" onclick="switchCfgTab('official')">
+        Official<span class="cfg-tab-dot" id="dotOfficial"></span>
+      </button>
+      <button class="cfg-tab" id="tabUrl" type="button" onclick="switchCfgTab('url')">
+        URL<span class="cfg-tab-dot" id="dotUrl"></span>
+      </button>
+      <button class="cfg-tab" id="tabPem" type="button" onclick="switchCfgTab('pem')">
+        PEM<span class="cfg-tab-dot" id="dotPem"></span>
+      </button>
+    </div>
+
+    <!-- Official panel -->
+    <div class="cfg-panel hidden" id="panelOfficial">
+      <div class="cfg-official">
+        <span class="cfg-official-url">
+          <a href="https://poixe.com/security.json" target="_blank" rel="noopener">poixe.com/security.json</a>
+        </span>
+        <button class="cbtn" id="btnOfficial" type="button" onclick="loadFromOfficial()">Use Official Key</button>
+      </div>
+    </div>
+
+    <!-- Custom URL panel -->
+    <div class="cfg-panel hidden" id="panelUrl">
+      <div class="cfg-row">
+        <input class="inp" id="cfgUrl" type="text" placeholder="http://localhost:3003/security.json" autocomplete="off" spellcheck="false">
+        <button class="cbtn" type="button" onclick="loadFromUrl()">Fetch</button>
+      </div>
+    </div>
+
+    <!-- PEM panel -->
+    <div class="cfg-panel hidden" id="panelPem">
+      <div style="margin-bottom:8px">
+        <textarea class="kta" id="cfgPem" rows="3" placeholder="-----BEGIN PUBLIC KEY-----
+MIIBojANBgkq...
+-----END PUBLIC KEY-----" style="min-height:96px" autocomplete="off" spellcheck="false"></textarea>
+      </div>
+      <button class="cbtn" type="button" onclick="loadFromPem()">Load PEM</button>
     </div>
   </div>
 
@@ -266,9 +384,7 @@ label{display:block;font-size:14px;font-weight:500;margin-bottom:8px;line-height
     <div class="csel" id="typeSel">
       <button class="csel-btn" type="button" onclick="cselToggle('typeSel')">
         <span class="csel-val" id="typeSelVal">OpenAI ChatGPT</span>
-        <svg class="csel-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 12 15 18 9"/>
-        </svg>
+        <svg class="csel-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="csel-dd" id="typeSel-dd"></div>
     </div>
@@ -285,9 +401,7 @@ label{display:block;font-size:14px;font-weight:500;margin-bottom:8px;line-height
     <div class="csel" id="regionSel">
       <button class="csel-btn" type="button" onclick="cselToggle('regionSel')">
         <span class="csel-val" id="regionSelVal">eu-central-1</span>
-        <svg class="csel-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 12 15 18 9"/>
-        </svg>
+        <svg class="csel-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="csel-dd" id="regionSel-dd"></div>
     </div>
@@ -335,8 +449,26 @@ label{display:block;font-size:14px;font-weight:500;margin-bottom:8px;line-height
 </div>
 </div>
 
+<div class="toast-rack" id="toastRack"></div>
+
 <script>
 "use strict";
+
+// ---- Constants ----
+const OFFICIAL_FP  = '19bb2f0101de7bb3e1ca6fea27fa06474b37de654b0191e3430b4e30f5c6e761';
+const DEFAULT_URL  = 'https://poixe.com/security.json';
+const STORAGE_KEY  = 'px-enc-cfg';
+
+// Three explicit source values stored in localStorage:
+//   'official' — always use DEFAULT_URL, ignore saved custom url/pem
+//   'url'      — use saved custom URL
+//   'pem'      — use saved PEM text
+// No saved source = first visit, auto-fetch official (same as 'official' but doesn't lock in)
+
+const SVG_SHIELD_OK   = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>`;
+const SVG_SHIELD_WARN = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>`;
+const SVG_ERR_ICO     = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`;
+const SVG_WARN_ICO    = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
 
 // ---- Channel types ----
 const TYPES_RAW = [
@@ -373,7 +505,6 @@ const TYPES_RAW = [
   {slug:"volcengine_doubao",      label:"Volcengine Doubao",       n:9 },
   {slug:"xai_grok",               label:"xAI Grok",                n:7 },
 ];
-// Already in alphabetical order above; build lookup map
 const TYPE_MAP = Object.fromEntries(TYPES_RAW.map(t => [t.slug, t]));
 const AWS_REGIONS = ['eu-central-1','eu-west-1','eu-west-2','us-east-1','us-east-2','us-west-2'];
 const HINTS = {
@@ -386,23 +517,247 @@ const PLACEHOLDERS = {
 };
 
 // ---- State ----
-let loadedKey = null;
-let curSlug = 'openai_chatgpt';
-let curRegion = 'eu-central-1';
+let loadedKey    = null;
+let curSlug      = 'openai_chatgpt';
+let curRegion    = 'eu-central-1';
+let keySourceUrl = null;
+let cfgOpen      = false;
+let cfgTab       = 'official';
+let activeSource = null;  // 'official' | 'url' | 'pem' | null
 
 // ---- Init ----
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   buildTypeSelect();
   buildRegionSelect();
   updateFields();
-  autoFetchKey();
+  restoreFormState();
+  await initKey();
   document.addEventListener('click', e => { if (!e.target.closest('.csel')) cselCloseAll(); });
 });
+
+// Restore form field values and selected tab from storage (pre-key-load)
+function restoreFormState() {
+  try {
+    const saved = getSaved();
+    if (saved.customUrl) document.getElementById('cfgUrl').value = saved.customUrl;
+    if (saved.pem)       document.getElementById('cfgPem').value = saved.pem;
+    // Open to the tab matching the saved source so panel shows relevant config
+    const tab = saved.source === 'url' ? 'url' : saved.source === 'pem' ? 'pem' : 'official';
+    switchCfgTab(tab, false);
+  } catch(_) {}
+}
+
+// On startup: restore from saved source, else auto-fetch official
+async function initKey() {
+  setChip('loading', 'Loading…');
+  try {
+    const saved = getSaved();
+
+    if (saved.source === 'pem' && saved.pem) {
+      loadedKey    = await parseKey('k1', normPem(saved.pem));
+      keySourceUrl = null;
+      activeSource = 'pem';
+      applyLoadedKey();
+      return;
+    }
+
+    if (saved.source === 'url' && saved.customUrl) {
+      loadedKey    = await fetchKeyFromUrl(saved.customUrl);
+      keySourceUrl = saved.customUrl;
+      activeSource = 'url';
+      applyLoadedKey();
+      return;
+    }
+
+    // 'official' or no source saved — fetch production key
+  } catch(_) {}
+
+  await autoFetchOfficial();
+}
+
+// ---- Key sources ----
+
+async function autoFetchOfficial() {
+  setChip('loading', 'Loading…');
+  try {
+    loadedKey    = await fetchKeyFromUrl(DEFAULT_URL);
+    keySourceUrl = DEFAULT_URL;
+    activeSource = 'official';
+    applyLoadedKey();
+  } catch(e) {
+    setChip('err', 'Key unavailable — click to retry');
+    activeSource = null;
+  }
+}
+
+// Explicit user action: "Use Official Key" button
+async function loadFromOfficial() {
+  const btn = document.getElementById('btnOfficial');
+  btn.disabled = true;
+  setChip('loading', 'Loading…');
+  try {
+    loadedKey    = await fetchKeyFromUrl(DEFAULT_URL);
+    keySourceUrl = DEFAULT_URL;
+    activeSource = 'official';
+    applyLoadedKey();
+    // Persist: source=official; keep customUrl/pem in storage untouched so user can switch back
+    persistPatch({source: 'official'});
+  } catch(e) {
+    setChip('err', 'Key unavailable — click to retry');
+    showToast('Failed to load official key', e.message, 'err');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function loadFromUrl() {
+  const url = document.getElementById('cfgUrl').value.trim();
+  if (!url) return;
+  setChip('loading', 'Loading…');
+  try {
+    loadedKey    = await fetchKeyFromUrl(url);
+    keySourceUrl = url;
+    activeSource = 'url';
+    applyLoadedKey();
+    // Save customUrl separately so switching back to Official doesn't lose it
+    persistPatch({source: 'url', customUrl: url});
+  } catch(e) {
+    setChip('err', 'Key unavailable — click to retry');
+    showToast('Failed to load key', e.message, 'err');
+  }
+}
+
+async function loadFromPem() {
+  const rawPem = document.getElementById('cfgPem').value.trim();
+  if (!rawPem) {
+    showToast('No PEM entered', 'Paste a public key in PEM format.', 'warn');
+    return;
+  }
+  const pem = normPem(rawPem);
+  try {
+    if (pem.includes('REPLACE_WITH_ACTUAL')) throw new Error('Placeholder key');
+    loadedKey    = await parseKey('k1', pem);
+    keySourceUrl = null;
+    activeSource = 'pem';
+    applyLoadedKey();
+    // Save PEM text; keep customUrl in storage untouched so user can switch back
+    persistPatch({source: 'pem', pem: rawPem});
+  } catch(e) {
+    showToast('Invalid PEM', e.message, 'err');
+  }
+}
+
+async function fetchKeyFromUrl(url) {
+  const r = await fetch(url, {signal: AbortSignal.timeout(10000), headers: {'Accept': 'application/json'}});
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  const doc = await r.json();
+  const pem = doc?.pubkey?.pem;
+  const kid = doc?.pubkey?.kid || 'k1';
+  if (!pem) throw new Error('No PEM in response');
+  if (pem.includes('REPLACE_WITH_ACTUAL')) throw new Error('Key not yet published');
+  return await parseKey(kid, pem);
+}
+
+function applyLoadedKey() {
+  const fp      = loadedKey.fp;
+  const fpShort = fp.slice(0, 8) + '…' + fp.slice(-8);
+  if (fp === OFFICIAL_FP) setChip('ok', fpShort);
+  else                    setChip('warn', fpShort);
+  updateCfgIndicators();
+}
+
+function onChipClick() {
+  const c = document.getElementById('chip');
+  if (c.classList.contains('ok') || c.classList.contains('warn')) {
+    if (keySourceUrl) window.open(keySourceUrl, '_blank', 'noopener,noreferrer');
+  } else if (c.classList.contains('err')) {
+    // Retry using the last saved source
+    const saved = getSaved();
+    if      (saved.source === 'pem' && saved.pem)       { switchCfgTab('pem', false); initKey(); }
+    else if (saved.source === 'url' && saved.customUrl) { switchCfgTab('url', false); initKey(); }
+    else                                                 autoFetchOfficial();
+  }
+}
+
+// ---- Config panel ----
+function toggleKeyConfig() {
+  cfgOpen = !cfgOpen;
+  document.getElementById('keyCfg').classList.toggle('hidden', !cfgOpen);
+  document.getElementById('gearBtn').classList.toggle('on', cfgOpen);
+  if (cfgOpen) updateCfgIndicators();
+}
+
+function switchCfgTab(tab, save = true) {
+  cfgTab = tab;
+  ['official','url','pem'].forEach(t => {
+    document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1))
+      .classList.toggle('active', t === tab);
+    document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1))
+      .classList.toggle('hidden', t !== tab);
+  });
+  if (save) persistPatch({uiTab: tab});
+}
+
+// Update banner + 3 tab dots to reflect which source is currently active
+function updateCfgIndicators() {
+  const banner    = document.getElementById('cfgBanner');
+  const bannerTxt = document.getElementById('cfgBannerTxt');
+  const official  = loadedKey && loadedKey.fp === OFFICIAL_FP;
+  const cls       = official ? '' : ' warn-src';
+
+  document.getElementById('dotOfficial').className = 'cfg-tab-dot' + (activeSource === 'official' ? ' on' + cls : '');
+  document.getElementById('dotUrl').className      = 'cfg-tab-dot' + (activeSource === 'url'      ? ' on' + cls : '');
+  document.getElementById('dotPem').className      = 'cfg-tab-dot' + (activeSource === 'pem'      ? ' on' + cls : '');
+
+  // Official button: disable with "In use" label when already active
+  const btnOff = document.getElementById('btnOfficial');
+  if (activeSource === 'official') {
+    btnOff.textContent = 'In use';
+    btnOff.disabled = true;
+  } else {
+    btnOff.textContent = 'Use Official Key';
+    btnOff.disabled = false;
+  }
+
+  if (!loadedKey || !activeSource) {
+    banner.classList.add('hidden');
+    return;
+  }
+  banner.classList.remove('hidden');
+  banner.className = 'cfg-banner ' + (official ? 'ok' : 'warn');
+
+  let label;
+  if (activeSource === 'official') {
+    label = 'poixe.com/security.json';
+  } else if (activeSource === 'url' && keySourceUrl) {
+    try { const u = new URL(keySourceUrl); label = u.host + u.pathname; } catch(_) { label = keySourceUrl; }
+  } else {
+    label = 'custom PEM';
+  }
+  bannerTxt.textContent = `${label}  ·  ${loadedKey.fp.slice(0,8)}…${loadedKey.fp.slice(-8)}`;
+}
+
+// ---- Persistence ----
+// Keys in storage:
+//   source    — 'official' | 'url' | 'pem'
+//   customUrl — last URL entered in the URL tab (preserved even when source isn't 'url')
+//   pem       — PEM text (preserved even when source isn't 'pem')
+//   uiTab     — last visible tab in the config panel (UI preference only)
+function getSaved() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(_) { return {}; }
+}
+function persistPatch(patch) {
+  try {
+    const saved = getSaved();
+    Object.assign(saved, patch);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+  } catch(_) {}
+}
 
 // ---- Build selects ----
 function buildTypeSelect() {
   const dd = document.getElementById('typeSel-dd');
-  const g = document.createElement('div');
+  const g  = document.createElement('div');
   g.style.padding = '4px 0';
   TYPES_RAW.forEach(t => g.appendChild(makeOpt(t.slug, t.label, t.slug === curSlug, s => {
     curSlug = s;
@@ -416,7 +771,7 @@ function buildTypeSelect() {
 
 function buildRegionSelect() {
   const dd = document.getElementById('regionSel-dd');
-  const g = document.createElement('div');
+  const g  = document.createElement('div');
   g.style.padding = '4px 0';
   AWS_REGIONS.forEach(r => g.appendChild(makeOpt(r, r, r === curRegion, s => {
     curRegion = s;
@@ -436,14 +791,13 @@ function makeOpt(value, label, selected, onClick) {
   return div;
 }
 
-// ---- Custom select ----
 function cselToggle(id) {
   const el = document.getElementById(id);
   const wasOpen = el.classList.contains('open');
   cselCloseAll();
   if (!wasOpen) el.classList.add('open');
 }
-function cselClose(id) { document.getElementById(id).classList.remove('open'); }
+function cselClose(id)  { document.getElementById(id).classList.remove('open'); }
 function cselCloseAll() { document.querySelectorAll('.csel.open').forEach(e => e.classList.remove('open')); }
 
 // ---- Update conditional fields ----
@@ -452,49 +806,14 @@ function updateFields() {
   document.getElementById('epGrp').classList.toggle('hidden', !spec.ep);
   document.getElementById('rgGrp').classList.toggle('hidden', !spec.rg);
   document.getElementById('fileGrp').classList.toggle('hidden', !spec.vx);
-
   const hintEl = document.getElementById('keyHint');
   const h = HINTS[curSlug];
   if (h) { hintEl.textContent = h; hintEl.classList.remove('hidden'); }
-  else { hintEl.classList.add('hidden'); }
-
+  else   { hintEl.classList.add('hidden'); }
   document.getElementById('apiKey').placeholder =
     PLACEHOLDERS[curSlug] || 'Paste your API key here — one per line for batch encryption';
-  document.getElementById('keyLbl').textContent = spec.vx ? 'Service Account JSON' : 'API key';
+  document.getElementById('keyLbl').textContent      = spec.vx ? 'Service Account JSON' : 'API key';
   document.getElementById('batchNote').style.display = spec.vx ? 'none' : '';
-}
-
-// ---- Auto key fetch ----
-async function autoFetchKey() {
-  setChip('loading', 'Loading…');
-  try {
-    const r = await fetch('https://poixe.com/security.json', {
-      signal: AbortSignal.timeout(12000),
-      headers: {'Accept': 'application/json'},
-    });
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    const doc = await r.json();
-    const pem = doc?.pubkey?.pem;
-    const kid = doc?.pubkey?.kid || 'k1';
-    if (!pem) throw new Error('No PEM in response');
-    if (pem.includes('REPLACE_WITH_ACTUAL')) throw new Error('Key not yet published');
-    loadedKey = await parseKey(kid, pem);
-    // Fingerprint: first 8 + … + last 8 hex chars
-    const fp = loadedKey.fp;
-    const fpShort = fp.slice(0, 8) + '…' + fp.slice(-8);
-    setChip('ok', `${kid}  ·  ${fpShort}`);
-  } catch(e) {
-    setChip('err', 'Key unavailable — click to retry');
-  }
-}
-
-function onChipClick() {
-  const c = document.getElementById('chip');
-  if (c.classList.contains('ok')) {
-    window.open('https://poixe.com/security.json', '_blank', 'noopener,noreferrer');
-  } else if (c.classList.contains('err')) {
-    autoFetchKey();
-  }
 }
 
 // ---- Encrypt ----
@@ -504,7 +823,7 @@ async function doEncrypt() {
     return;
   }
   const spec = TYPE_MAP[curSlug] || {};
-  const raw = document.getElementById('apiKey').value;
+  const raw  = document.getElementById('apiKey').value;
 
   let keys;
   if (spec.vx) {
@@ -566,9 +885,7 @@ function renderOutput(results, errMsg, isErr) {
     btns.appendChild(makeCopyBtn(results[0]));
   } else {
     title.textContent = `${results.length} keys encrypted`;
-    // JSON copy button in header
     btns.appendChild(makeJsonCopyBtn(results));
-    // Rows
     const rowsDiv = document.createElement('div');
     rowsDiv.className = 'out-rows';
     results.forEach((r, i) => {
@@ -581,18 +898,15 @@ function renderOutput(results, errMsg, isErr) {
       txt.className = 'out-row-txt';
       txt.textContent = r;
       const cb = makeRowCopyBtn(r);
-      row.appendChild(num);
-      row.appendChild(txt);
-      row.appendChild(cb);
+      row.appendChild(num); row.appendChild(txt); row.appendChild(cb);
       rowsDiv.appendChild(row);
     });
     body.appendChild(rowsDiv);
   }
-
   wrap.classList.remove('hidden');
 }
 
-// ---- Copy button factories ----
+// ---- Copy buttons ----
 function makeCopyBtn(text) {
   const b = document.createElement('button');
   b.className = 'cbtn';
@@ -600,7 +914,6 @@ function makeCopyBtn(text) {
   b.onclick = () => flashCopy(b, text, 'cbtn ok', 'cbtn');
   return b;
 }
-
 function makeJsonCopyBtn(arr) {
   const b = document.createElement('button');
   b.className = 'cbtn';
@@ -608,7 +921,6 @@ function makeJsonCopyBtn(arr) {
   b.onclick = () => flashCopy(b, JSON.stringify(arr, null, 2), 'cbtn ok', 'cbtn');
   return b;
 }
-
 function makeRowCopyBtn(text) {
   const b = document.createElement('button');
   b.className = 'row-cbtn';
@@ -616,15 +928,11 @@ function makeRowCopyBtn(text) {
   b.onclick = () => flashCopy(b, text, 'row-cbtn ok', 'row-cbtn', '✓', 'Copy');
   return b;
 }
-
 async function flashCopy(btn, text, okClass, baseClass, okText, origText) {
   try {
     await navigator.clipboard.writeText(text);
-    if (okText) {
-      btn.textContent = okText;
-    } else {
-      btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied`;
-    }
+    if (okText) { btn.textContent = okText; }
+    else { btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied`; }
     btn.className = okClass;
     setTimeout(() => {
       btn.className = baseClass;
@@ -636,14 +944,14 @@ async function flashCopy(btn, text, okClass, baseClass, okText, origText) {
 
 // ---- WebCrypto seal ----
 async function seal(pub, kid, n, key, params) {
-  const hasP = Object.keys(params).length > 0;
+  const hasP    = Object.keys(params).length > 0;
   const payload = JSON.stringify({v:2, t:n, k:key, ...(hasP ? {p:params} : {})});
-  const aesRaw = crypto.getRandomValues(new Uint8Array(32));
-  const nonce  = crypto.getRandomValues(new Uint8Array(12));
-  const aad    = new TextEncoder().encode('px-egress-v2|' + kid);
-  const aesK   = await crypto.subtle.importKey('raw', aesRaw, 'AES-GCM', false, ['encrypt']);
-  const ct     = await crypto.subtle.encrypt({name:'AES-GCM', iv:nonce, additionalData:aad, tagLength:128}, aesK, new TextEncoder().encode(payload));
-  const wrap   = await crypto.subtle.encrypt({name:'RSA-OAEP'}, pub, aesRaw);
+  const aesRaw  = crypto.getRandomValues(new Uint8Array(32));
+  const nonce   = crypto.getRandomValues(new Uint8Array(12));
+  const aad     = new TextEncoder().encode('px-egress-v2|' + kid);
+  const aesK    = await crypto.subtle.importKey('raw', aesRaw, 'AES-GCM', false, ['encrypt']);
+  const ct      = await crypto.subtle.encrypt({name:'AES-GCM', iv:nonce, additionalData:aad, tagLength:128}, aesK, new TextEncoder().encode(payload));
+  const wrap    = await crypto.subtle.encrypt({name:'RSA-OAEP'}, pub, aesRaw);
   const b = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
   return `enc:v2:${kid}:${b(wrap)}:${b(nonce)}:${b(ct)}`;
 }
@@ -655,6 +963,11 @@ async function parseKey(kid, pem) {
   const hb  = await crypto.subtle.digest('SHA-256', der);
   const fp  = Array.from(new Uint8Array(hb)).map(b => b.toString(16).padStart(2,'0')).join('');
   return {kid, pub, fp};
+}
+
+// Handle both real newlines and escaped \n (copy-paste from JSON)
+function normPem(pem) {
+  return pem.replace(/\\n/g, '\n');
 }
 
 // ---- Azure normalize ----
@@ -679,9 +992,33 @@ function loadSAFile() {
 
 // ---- Chip ----
 function setChip(state, text) {
-  const c = document.getElementById('chip');
+  const c    = document.getElementById('chip');
+  const icon = document.getElementById('chipIcon');
   c.className = 'chip ' + state;
   document.getElementById('chipText').textContent = text;
+  if (state === 'ok')        icon.innerHTML = SVG_SHIELD_OK;
+  else if (state === 'warn') icon.innerHTML = SVG_SHIELD_WARN;
+  else                       icon.innerHTML = '<span class="chip-dot"></span>';
+}
+
+// ---- Toast ----
+function showToast(title, msg, type = 'err') {
+  const rack = document.getElementById('toastRack');
+  const t    = document.createElement('div');
+  t.className = `toast t-${type}`;
+  const ico = type === 'err' ? SVG_ERR_ICO : SVG_WARN_ICO;
+  t.innerHTML = `<span class="toast-ico">${ico}</span><div class="toast-body"><div class="toast-title">${escHtml(title)}</div><div class="toast-msg">${escHtml(msg)}</div></div>`;
+  rack.appendChild(t);
+  const dismiss = () => {
+    t.classList.add('out');
+    t.addEventListener('animationend', () => t.remove(), {once: true});
+  };
+  t.addEventListener('click', dismiss);
+  setTimeout(dismiss, 4500);
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 </script>
 </body>
