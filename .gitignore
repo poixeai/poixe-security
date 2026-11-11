@@ -1,0 +1,25 @@
+# Go binaries
+cli/cli
+cli/poixe
+*.exe
+
+# Go build cache
+*.test
+*.out
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# Editor
+.idea/
+.vscode/
+*.swp

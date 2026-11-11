@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-11-12T00:00:00Z",
+  "pubkey": {
+    "kid": "k1",
+    "algorithm": "RSA-OAEP-SHA256+AES-256-GCM",
+    "pem": "-----BEGIN PUBLIC KEY-----\nREPLACE_WITH_ACTUAL_PUBLIC_KEY_PEM\n-----END PUBLIC KEY-----\n",
+    "fingerprint": "REPLACE_WITH_ACTUAL_SHA256_FINGERPRINT"
+  },
+  "egress_ips": []
+}
