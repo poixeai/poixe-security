@@ -14,17 +14,16 @@
   --subtle: #a1a1aa;
   --primary: #18181b;
   --primary-fg: #fafafa;
-  --focus: rgba(24,24,27,0.08);
-  --success-text: #15803d;
-  --success-bg: #f0fdf4;
-  --success-border: #bbf7d0;
-  --warn-text: #b45309;
-  --warn-bg: #fffbeb;
-  --warn-border: #fde68a;
-  --err-text: #dc2626;
-  --err-bg: #fef2f2;
-  --err-border: #fecaca;
-  --mono: ui-monospace, 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  --focus: rgba(24,24,27,0.09);
+  --hover: #f4f4f5;
+  --ok: #299D90;
+  --ok-bg: rgba(41,157,144,0.07);
+  --ok-bd: rgba(41,157,144,0.28);
+  --warn: #E8C469;
+  --warn-bg: rgba(232,196,105,0.09);
+  --warn-bd: rgba(232,196,105,0.42);
+  --err: #dc2626;
+  --mono: ui-monospace,'Cascadia Code','Fira Code','Consolas',monospace;
   --r: 8px;
 }
 @media (prefers-color-scheme: dark) {
@@ -37,553 +36,432 @@
     --subtle: #71717a;
     --primary: #fafafa;
     --primary-fg: #09090b;
-    --focus: rgba(255,255,255,0.08);
-    --success-text: #4ade80;
-    --success-bg: #052e16;
-    --success-border: #166534;
-    --warn-text: #fbbf24;
-    --warn-bg: #1c0a00;
-    --warn-border: #78350f;
-    --err-text: #f87171;
-    --err-bg: #450a0a;
-    --err-border: #991b1b;
+    --focus: rgba(255,255,255,0.09);
+    --hover: #27272a;
+    --ok: #34b8a8;
+    --ok-bg: rgba(41,157,144,0.1);
+    --ok-bd: rgba(41,157,144,0.35);
+    --warn: #E8C469;
+    --warn-bg: rgba(232,196,105,0.1);
+    --warn-bd: rgba(232,196,105,0.35);
   }
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:28px 16px;line-height:1.5;
 }
-.frame { width: 100%; max-width: 460px; }
+.page{width:100%;max-width:640px}
 
-/* Card */
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:32px;
+  box-shadow:0 1px 4px rgba(0,0,0,0.05),0 2px 8px rgba(0,0,0,0.03);
 }
 
 /* Header */
-.hdr {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  line-height: 1;
-}
-.brand svg { color: var(--muted); flex-shrink: 0; }
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.brand{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:600;letter-spacing:-.02em}
+.brand svg{color:var(--muted)}
 
-/* Key chip */
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 9px 3px 7px;
-  border-radius: 100px;
-  font-size: 11.5px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--muted);
-  cursor: default;
-  user-select: none;
-  white-space: nowrap;
-  transition: all 0.15s;
-  font-family: inherit;
-  line-height: 1;
-  outline: none;
+/* Key chip — shadcn tag style */
+.chip{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:2px 8px 2px 7px;border-radius:5px;
+  font-size:11.5px;font-weight:500;
+  border:1px solid var(--border);
+  background:transparent;color:var(--muted);
+  user-select:none;white-space:nowrap;
+  transition:opacity .15s;cursor:default;
+  font-family:var(--mono);letter-spacing:.01em;
 }
-.chip:is(button) { cursor: pointer; }
-.chip.ok {
-  color: var(--success-text);
-  border-color: var(--success-border);
-  background: var(--success-bg);
-}
-.chip.err {
-  color: var(--warn-text);
-  border-color: var(--warn-border);
-  background: var(--warn-bg);
-  cursor: pointer;
-}
-.chip.err:hover { opacity: 0.85; }
-.chip-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  flex-shrink: 0;
-}
-.chip.loading .chip-dot {
-  animation: pulse 1.4s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.25; }
-}
+.chip.ok{color:var(--ok);border-color:var(--ok-bd);background:var(--ok-bg);cursor:pointer}
+.chip.ok:hover{opacity:.75}
+.chip.err{color:var(--warn);border-color:var(--warn-bd);background:var(--warn-bg);cursor:pointer}
+.chip.err:hover{opacity:.75}
+.chip-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.chip.loading .chip-dot{animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
 /* Form groups */
-.fg { margin-bottom: 14px; }
-.fg:last-of-type { margin-bottom: 0; }
-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text);
-  margin-bottom: 6px;
-  line-height: 1;
-}
-.hint {
-  font-size: 11.5px;
-  color: var(--muted);
-  margin-top: 5px;
-  line-height: 1.4;
-}
+.fg{margin-bottom:20px}
+label{display:block;font-size:14px;font-weight:500;margin-bottom:8px;line-height:1}
+.label-row{display:flex;align-items:baseline;gap:6px;margin-bottom:8px}
+.label-note{font-size:12.5px;font-weight:400;color:var(--muted)}
+.hint{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.5}
 
-/* Inputs */
-.input, select, textarea {
-  display: block;
-  width: 100%;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  color: var(--text);
-  font-size: 13.5px;
-  font-family: inherit;
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
+/* Text input */
+.inp{
+  display:block;width:100%;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r);color:var(--text);font-size:14px;font-family:inherit;
+  outline:none;padding:10px 13px;height:42px;
+  transition:border-color .15s,box-shadow .15s;
 }
-.input, select { padding: 8px 12px; height: 36px; }
-textarea { padding: 8px 12px; resize: none; line-height: 1.5; }
-.mono { font-family: var(--mono); font-size: 12.5px; }
-.input:focus, select:focus, textarea:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px var(--focus);
-}
-.input::placeholder, textarea::placeholder { color: var(--subtle); }
+.inp:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--focus)}
+.inp::placeholder{color:var(--subtle)}
 
-/* Custom select */
-.sw { position: relative; }
-.sw select { padding-right: 32px; cursor: pointer; appearance: none; -webkit-appearance: none; }
-.sw::after {
-  content: '';
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 14px 14px;
+/* Key textarea */
+.kta{
+  display:block;width:100%;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r);color:var(--text);font-size:13px;font-family:var(--mono);
+  outline:none;padding:12px 14px;resize:vertical;line-height:1.65;min-height:160px;
+  transition:border-color .15s,box-shadow .15s;
 }
-@media (prefers-color-scheme: dark) {
-  .sw::after {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  }
-}
-select option { color: var(--text); background: var(--card); }
-select optgroup { font-size: 11px; font-weight: 600; }
+.kta:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--focus)}
+.kta::placeholder{color:var(--subtle);font-family:inherit}
 
-/* File upload row */
-.file-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 6px;
+/* Custom Select */
+.csel{position:relative}
+.csel-btn{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  width:100%;height:42px;padding:0 13px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  color:var(--text);font-size:14px;font-family:inherit;
+  cursor:pointer;outline:none;text-align:left;
+  transition:border-color .15s,box-shadow .15s;
 }
-.btn-file {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--bg);
-  color: var(--muted);
-  font-size: 12px;
-  font-family: inherit;
-  cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
-  white-space: nowrap;
-}
-.btn-file:hover { border-color: var(--primary); color: var(--text); }
-.btn-file svg { flex-shrink: 0; }
+.csel-btn:focus,.csel.open .csel-btn{border-color:var(--primary);box-shadow:0 0 0 3px var(--focus)}
+.csel-val{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.csel-arr{flex-shrink:0;color:var(--muted);transition:transform .2s}
+.csel.open .csel-arr{transform:rotate(180deg)}
 
-/* Primary button */
-.btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 100%;
-  padding: 9px 16px;
-  background: var(--primary);
-  color: var(--primary-fg);
-  border: 1px solid transparent;
-  border-radius: var(--r);
-  font-size: 13.5px;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  transition: opacity 0.15s;
-  margin-top: 16px;
-  line-height: 1;
-  outline: none;
+.csel-dd{
+  position:absolute;top:calc(100% + 5px);left:0;right:0;
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  box-shadow:0 6px 24px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06);
+  max-height:300px;overflow-y:auto;z-index:999;
+  opacity:0;transform:translateY(-8px) scale(.98);pointer-events:none;
+  transition:opacity .15s ease,transform .15s ease;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent;
 }
-.btn:hover { opacity: 0.85; }
-.btn:disabled { opacity: 0.35; cursor: not-allowed; }
-.btn svg { flex-shrink: 0; }
+.csel-dd::-webkit-scrollbar{width:6px}
+.csel-dd::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.csel.open .csel-dd{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+
+.co{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 12px;font-size:14px;cursor:pointer;
+  transition:background .1s;user-select:none;
+}
+.co:hover{background:var(--hover)}
+.co.sel{font-weight:500}
+.co-chk{
+  width:14px;height:14px;flex-shrink:0;margin-left:8px;
+  color:var(--primary);visibility:hidden;
+}
+.co.sel .co-chk{visibility:visible}
+
+/* File upload */
+.file-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 14px;border:1px dashed var(--border);border-radius:var(--r);
+  background:transparent;color:var(--muted);font-size:13.5px;
+  font-family:inherit;cursor:pointer;transition:border-color .15s,color .15s;
+}
+.file-btn:hover{border-color:var(--primary);color:var(--text)}
+
+/* Encrypt button */
+.enc-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:12px 20px;margin-top:22px;
+  background:var(--primary);color:var(--primary-fg);
+  border:none;border-radius:var(--r);
+  font-size:14.5px;font-weight:500;font-family:inherit;
+  cursor:pointer;transition:opacity .15s;letter-spacing:-.01em;outline:none;
+}
+.enc-btn:hover:not(:disabled){opacity:.85}
+.enc-btn:disabled{opacity:.35;cursor:not-allowed}
 
 /* Output */
-.out-wrap {
-  margin-top: 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  overflow: hidden;
+.out{margin-top:22px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.out-hdr{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:10px 14px;border-bottom:1px solid var(--border);background:var(--card);
 }
-.out-text {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text);
-  padding: 10px 12px;
-  margin: 0;
-  word-break: break-all;
-  white-space: pre-wrap;
-  line-height: 1.6;
-  background: var(--bg);
+.out-title{font-size:13px;font-weight:500;color:var(--muted);flex:1}
+.out-hdr-btns{display:flex;align-items:center;gap:6px}
+
+.cbtn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border:1px solid var(--border);border-radius:6px;
+  background:transparent;color:var(--muted);font-size:12px;
+  font-family:inherit;cursor:pointer;
+  transition:border-color .12s,color .12s;outline:none;white-space:nowrap;
 }
-.out-text.err-text { color: var(--err-text); }
-.out-actions {
-  display: flex;
-  justify-content: flex-end;
-  padding: 6px 8px;
-  border-top: 1px solid var(--border);
-  background: var(--card);
+.cbtn:hover{border-color:var(--primary);color:var(--text)}
+.cbtn.ok{color:var(--ok);border-color:var(--ok-bd)}
+
+/* Single output */
+.out-single{
+  padding:14px 16px;background:var(--bg);font-family:var(--mono);
+  font-size:12.5px;line-height:1.7;color:var(--text);
+  word-break:break-all;white-space:pre-wrap;margin:0;
+  min-height:90px;max-height:320px;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent;
 }
-.btn-copy {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--muted);
-  font-size: 12px;
-  font-family: inherit;
-  cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
-  outline: none;
+.out-single::-webkit-scrollbar{width:6px}
+.out-single::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.out-single.err-text{color:var(--err)}
+
+/* Batch rows */
+.out-rows{max-height:360px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.out-rows::-webkit-scrollbar{width:6px}
+.out-rows::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.out-row{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 14px;border-bottom:1px solid var(--border);
+  background:var(--bg);
 }
-.btn-copy:hover { border-color: var(--primary); color: var(--text); }
-.btn-copy.copied { color: var(--success-text); border-color: var(--success-border); }
+.out-row:last-child{border-bottom:none}
+.out-n{
+  font-size:11px;color:var(--subtle);min-width:18px;padding-top:3px;
+  flex-shrink:0;font-variant-numeric:tabular-nums;
+}
+.out-row-txt{
+  flex:1;font-family:var(--mono);font-size:12.5px;line-height:1.65;
+  word-break:break-all;white-space:pre-wrap;margin:0;color:var(--text);
+}
+.row-cbtn{
+  flex-shrink:0;padding:3px 9px;border:1px solid var(--border);border-radius:5px;
+  background:transparent;color:var(--muted);font-size:11.5px;font-family:inherit;
+  cursor:pointer;transition:border-color .12s,color .12s;white-space:nowrap;outline:none;
+}
+.row-cbtn:hover{border-color:var(--muted);color:var(--text)}
+.row-cbtn.ok{color:var(--ok);border-color:var(--ok-bd)}
 
 /* Footer */
-.foot {
-  margin-top: 12px;
-  text-align: center;
-  font-size: 11.5px;
-  color: var(--subtle);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 4px;
-  line-height: 1.5;
+.foot{
+  margin-top:16px;text-align:center;font-size:12px;color:var(--subtle);
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;
 }
-.foot a { color: var(--muted); text-decoration: none; }
-.foot a:hover { color: var(--text); }
-.foot-sep { color: var(--border); }
-.btn-link {
-  background: none;
-  border: none;
-  color: var(--muted);
-  font-size: 11.5px;
-  font-family: inherit;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-  text-decoration-color: var(--border);
-  outline: none;
-}
-.btn-link:hover { color: var(--text); }
+.foot a{color:var(--muted);text-decoration:none}
+.foot a:hover{color:var(--text)}
+.foot-sep{opacity:.5}
 
-/* Offline panel */
-.offline-panel {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px 20px;
-  margin-top: 10px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-}
-.offline-panel .row-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-.btn-sec {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  padding: 7px 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  background: var(--card);
-  color: var(--text);
-  font-size: 13px;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  transition: border-color 0.15s;
-  margin-top: 12px;
-  outline: none;
-}
-.btn-sec:hover { border-color: var(--primary); }
-
-.hidden { display: none !important; }
+.hidden{display:none!important}
 </style>
 </head>
 <body>
-<div class="frame">
-  <div class="card">
+<div class="page">
+<div class="card">
 
-    <!-- Header -->
-    <div class="hdr">
-      <div class="brand">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-        </svg>
-        Key Encryptor
-      </div>
-      <button class="chip loading" id="chip" onclick="onChipClick()" title="Click to retry if key load failed">
-        <span class="chip-dot" id="chipDot"></span>
-        <span id="chipLabel">Loading…</span>
-      </button>
-    </div>
-
-    <!-- Channel type -->
-    <div class="fg">
-      <label for="typeSelect">Channel type</label>
-      <div class="sw">
-        <select id="typeSelect" onchange="onTypeChange()"></select>
-      </div>
-    </div>
-
-    <!-- Azure endpoint (conditional) -->
-    <div class="fg hidden" id="endpointGroup">
-      <label for="endpoint">Azure endpoint</label>
-      <input class="input" id="endpoint" type="text" placeholder="https://my-resource.openai.azure.com" autocomplete="off" spellcheck="false">
-      <div class="hint">Base URL only — must end with .azure.com</div>
-    </div>
-
-    <!-- AWS region (conditional) -->
-    <div class="fg hidden" id="regionGroup">
-      <label for="regionSelect">AWS region</label>
-      <div class="sw">
-        <select id="regionSelect">
-          <option value="eu-central-1">eu-central-1</option>
-          <option value="eu-west-1">eu-west-1</option>
-          <option value="eu-west-2">eu-west-2</option>
-          <option value="us-east-1">us-east-1</option>
-          <option value="us-east-2">us-east-2</option>
-          <option value="us-west-2">us-west-2</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- API key -->
-    <div class="fg">
-      <label id="keyLabel" for="apiKey">API key</label>
-      <textarea class="input mono" id="apiKey" rows="3" placeholder="Paste your API key here…" autocomplete="off" spellcheck="false"></textarea>
-      <div class="hint hidden" id="keyHint"></div>
-    </div>
-
-    <!-- SA JSON file upload (Vertex only) -->
-    <div class="fg hidden" id="fileGroup">
-      <label class="btn-file" for="saFile">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="17 8 12 3 7 8"/>
-          <line x1="12" y1="3" x2="12" y2="15"/>
-        </svg>
-        Load JSON file
-        <input type="file" id="saFile" accept=".json,application/json" style="display:none" onchange="loadSAFile()">
-      </label>
-    </div>
-
-    <!-- Encrypt button -->
-    <button class="btn" id="encBtn" onclick="doEncrypt()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+  <div class="hdr">
+    <div class="brand">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
       </svg>
-      Encrypt
-    </button>
-
-    <!-- Output -->
-    <div class="out-wrap hidden" id="outWrap">
-      <pre class="out-text" id="outText"></pre>
-      <div class="out-actions">
-        <button class="btn-copy" id="copyBtn" onclick="copyOutput()">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-          </svg>
-          Copy
-        </button>
-      </div>
+      Key Encryptor
     </div>
-
+    <div class="chip loading" id="chip" onclick="onChipClick()">
+      <span class="chip-dot"></span>
+      <span id="chipText">Loading…</span>
+    </div>
   </div>
 
-  <!-- Footer -->
-  <div class="foot">
-    <a href="https://github.com/poixeai/poixe-security" target="_blank" rel="noopener">poixeai/poixe-security</a>
-    <span class="foot-sep">·</span>
-    <span>Encrypted locally in your browser</span>
-    <span class="foot-sep">·</span>
-    <button class="btn-link" onclick="toggleOfflinePanel()">Use custom key</button>
+  <div class="fg">
+    <label>Channel type</label>
+    <div class="csel" id="typeSel">
+      <button class="csel-btn" type="button" onclick="cselToggle('typeSel')">
+        <span class="csel-val" id="typeSelVal">OpenAI ChatGPT</span>
+        <svg class="csel-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div class="csel-dd" id="typeSel-dd"></div>
+    </div>
   </div>
 
-  <!-- Offline panel -->
-  <div class="offline-panel hidden" id="offlinePanel">
-    <div class="fg">
-      <label for="customPem">PEM public key</label>
-      <textarea class="input mono" id="customPem" rows="5" placeholder="-----BEGIN PUBLIC KEY-----&#10;MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...&#10;-----END PUBLIC KEY-----"></textarea>
-    </div>
-    <div class="row-2">
-      <div class="fg">
-        <label for="customKid">Key ID</label>
-        <input class="input" id="customKid" type="text" placeholder="k1" autocomplete="off">
-      </div>
-      <div class="fg">
-        <label for="customFp">Fingerprint (optional)</label>
-        <input class="input" id="customFp" type="text" placeholder="4a8f9b2c…" autocomplete="off">
-      </div>
-    </div>
-    <button class="btn-sec" onclick="loadOfflineKey()">Load key</button>
+  <div class="fg hidden" id="epGrp">
+    <label>Azure endpoint</label>
+    <input class="inp" id="endpoint" type="text" placeholder="https://my-resource.openai.azure.com" autocomplete="off" spellcheck="false">
+    <div class="hint">Base URL only — must end with .azure.com</div>
   </div>
 
+  <div class="fg hidden" id="rgGrp">
+    <label>AWS region</label>
+    <div class="csel" id="regionSel">
+      <button class="csel-btn" type="button" onclick="cselToggle('regionSel')">
+        <span class="csel-val" id="regionSelVal">eu-central-1</span>
+        <svg class="csel-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+      <div class="csel-dd" id="regionSel-dd"></div>
+    </div>
+  </div>
+
+  <div class="fg">
+    <div class="label-row">
+      <label id="keyLbl" style="margin-bottom:0">API key</label>
+      <span class="label-note" id="batchNote">— one per line for batch</span>
+    </div>
+    <textarea class="kta" id="apiKey" rows="7" placeholder="Paste your API key here — one per line for batch encryption" autocomplete="off" spellcheck="false"></textarea>
+    <div class="hint hidden" id="keyHint"></div>
+  </div>
+
+  <div class="fg hidden" id="fileGrp">
+    <label class="file-btn" for="saFile">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      Load Service Account JSON file
+      <input type="file" id="saFile" accept=".json,application/json" onchange="loadSAFile()" style="display:none">
+    </label>
+  </div>
+
+  <button class="enc-btn" id="encBtn" onclick="doEncrypt()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </svg>
+    <span id="encLabel">Encrypt</span>
+  </button>
+
+  <div class="out hidden" id="outWrap">
+    <div class="out-hdr">
+      <span class="out-title" id="outTitle">Result</span>
+      <div class="out-hdr-btns" id="outHdrBtns"></div>
+    </div>
+    <div id="outBody"></div>
+  </div>
+
+</div>
+<div class="foot">
+  <a href="https://github.com/poixeai/poixe-security" target="_blank" rel="noopener">poixeai/poixe-security</a>
+  <span class="foot-sep">·</span>
+  <span>Encrypted locally in your browser</span>
+</div>
 </div>
 
 <script>
 "use strict";
 
-// ---- Channel type registry ----
-const GROUPS = [
-  { label: "Major APIs", types: [
-    { slug:"openai_chatgpt",         label:"OpenAI ChatGPT",          typeInt:2  },
-    { slug:"anthropic_claude",       label:"Anthropic Claude",        typeInt:5  },
-    { slug:"google_aistudio_gemini", label:"Google AI Studio",        typeInt:6  },
-    { slug:"deepseek_deepseek",      label:"DeepSeek",                typeInt:4  },
-    { slug:"xai_grok",               label:"xAI Grok",                typeInt:7  },
-    { slug:"moonshot_kimi",          label:"Moonshot Kimi",           typeInt:16 },
-  ]},
-  { label: "Azure", types: [
-    { slug:"azure_chatgpt",          label:"Azure ChatGPT",           typeInt:3,  endpoint:true },
-    { slug:"azure_claude",           label:"Azure Claude",            typeInt:31, endpoint:true },
-  ]},
-  { label: "AWS", types: [
-    { slug:"aws_bedrock_claude",     label:"AWS Bedrock Claude",      typeInt:29, region:true },
-    { slug:"aws_platform_claude",    label:"AWS Claude (Platform)",   typeInt:30, region:true, awsPlatform:true },
-  ]},
-  { label: "Google Cloud", types: [
-    { slug:"google_vertex_gemini",   label:"Vertex Gemini",           typeInt:32, vertex:true },
-  ]},
-  { label: "OpenRouter", types: [
-    { slug:"openrouter_chatgpt",     label:"OpenRouter ChatGPT",      typeInt:33 },
-    { slug:"openrouter_claude",      label:"OpenRouter Claude",       typeInt:34 },
-    { slug:"openrouter_gemini",      label:"OpenRouter Gemini",       typeInt:35 },
-  ]},
-  { label: "Volcengine", types: [
-    { slug:"volcengine_deepseek",    label:"Volcengine DeepSeek",     typeInt:8  },
-    { slug:"volcengine_doubao",      label:"Volcengine Doubao",       typeInt:9  },
-  ]},
-  { label: "Aliyun", types: [
-    { slug:"aliyun_deepseek",        label:"Aliyun DeepSeek",         typeInt:10 },
-    { slug:"aliyun_qwen",            label:"Aliyun Qwen",             typeInt:11 },
-    { slug:"aliyun_kimi",            label:"Aliyun Kimi",             typeInt:17 },
-  ]},
-  { label: "SiliconFlow", types: [
-    { slug:"siliconflow_deepseek",   label:"SiliconFlow DeepSeek",    typeInt:12 },
-    { slug:"siliconflow_qwen",       label:"SiliconFlow Qwen",        typeInt:13 },
-    { slug:"siliconflow_kimi",       label:"SiliconFlow Kimi",        typeInt:18 },
-  ]},
-  { label: "Chutes", types: [
-    { slug:"chutes_deepseek",        label:"Chutes DeepSeek",         typeInt:14 },
-    { slug:"chutes_qwen",            label:"Chutes Qwen",             typeInt:15 },
-    { slug:"chutes_kimi",            label:"Chutes Kimi",             typeInt:19 },
-    { slug:"chutes_chatgpt",         label:"Chutes ChatGPT",          typeInt:20 },
-  ]},
-  { label: "Others", types: [
-    { slug:"cerebras_chatgpt",       label:"Cerebras ChatGPT",        typeInt:21 },
-    { slug:"groq_chatgpt",           label:"Groq ChatGPT",            typeInt:22 },
-    { slug:"fireworks_chatgpt",      label:"Fireworks ChatGPT",       typeInt:23 },
-    { slug:"novita_chatgpt",         label:"Novita ChatGPT",          typeInt:24 },
-    { slug:"together_chatgpt",       label:"Together ChatGPT",        typeInt:25 },
-    { slug:"nebius_chatgpt",         label:"Nebius ChatGPT",          typeInt:26 },
-  ]},
+// ---- Channel types ----
+const TYPES_RAW = [
+  {slug:"aliyun_deepseek",        label:"Aliyun DeepSeek",         n:10},
+  {slug:"aliyun_kimi",            label:"Aliyun Kimi",             n:17},
+  {slug:"aliyun_qwen",            label:"Aliyun Qwen",             n:11},
+  {slug:"anthropic_claude",       label:"Anthropic Claude",        n:5 },
+  {slug:"aws_bedrock_claude",     label:"AWS Bedrock Claude",      n:29, rg:1},
+  {slug:"aws_platform_claude",    label:"AWS Claude (Platform)",   n:30, rg:1},
+  {slug:"azure_chatgpt",          label:"Azure ChatGPT",           n:3,  ep:1},
+  {slug:"azure_claude",           label:"Azure Claude",            n:31, ep:1},
+  {slug:"cerebras_chatgpt",       label:"Cerebras ChatGPT",        n:21},
+  {slug:"chutes_chatgpt",         label:"Chutes ChatGPT",          n:20},
+  {slug:"chutes_deepseek",        label:"Chutes DeepSeek",         n:14},
+  {slug:"chutes_kimi",            label:"Chutes Kimi",             n:19},
+  {slug:"chutes_qwen",            label:"Chutes Qwen",             n:15},
+  {slug:"deepseek_deepseek",      label:"DeepSeek",                n:4 },
+  {slug:"fireworks_chatgpt",      label:"Fireworks ChatGPT",       n:23},
+  {slug:"google_aistudio_gemini", label:"Google AI Studio",        n:6 },
+  {slug:"groq_chatgpt",           label:"Groq ChatGPT",            n:22},
+  {slug:"moonshot_kimi",          label:"Moonshot Kimi",           n:16},
+  {slug:"nebius_chatgpt",         label:"Nebius ChatGPT",          n:26},
+  {slug:"novita_chatgpt",         label:"Novita ChatGPT",          n:24},
+  {slug:"openai_chatgpt",         label:"OpenAI ChatGPT",          n:2 },
+  {slug:"openrouter_chatgpt",     label:"OpenRouter ChatGPT",      n:33},
+  {slug:"openrouter_claude",      label:"OpenRouter Claude",       n:34},
+  {slug:"openrouter_gemini",      label:"OpenRouter Gemini",       n:35},
+  {slug:"siliconflow_deepseek",   label:"SiliconFlow DeepSeek",    n:12},
+  {slug:"siliconflow_kimi",       label:"SiliconFlow Kimi",        n:18},
+  {slug:"siliconflow_qwen",       label:"SiliconFlow Qwen",        n:13},
+  {slug:"together_chatgpt",       label:"Together ChatGPT",        n:25},
+  {slug:"google_vertex_gemini",   label:"Vertex Gemini",           n:32, vx:1},
+  {slug:"volcengine_deepseek",    label:"Volcengine DeepSeek",     n:8 },
+  {slug:"volcengine_doubao",      label:"Volcengine Doubao",       n:9 },
+  {slug:"xai_grok",               label:"xAI Grok",                n:7 },
 ];
-
-const ALL_TYPES = GROUPS.flatMap(g => g.types);
-
-const KEY_HINTS = {
-  "aws_platform_claude": "Format: workspace_id api_key (separated by a space)",
-  "google_vertex_gemini": "Paste the full Service Account JSON, or load from file above",
+// Already in alphabetical order above; build lookup map
+const TYPE_MAP = Object.fromEntries(TYPES_RAW.map(t => [t.slug, t]));
+const AWS_REGIONS = ['eu-central-1','eu-west-1','eu-west-2','us-east-1','us-east-2','us-west-2'];
+const HINTS = {
+  "aws_platform_claude": "Format: workspace_id api_key (space-separated) — one pair per line for batch",
+  "google_vertex_gemini": "Paste Service Account JSON — single key only, or use file upload above",
 };
-
-const KEY_PLACEHOLDER = {
-  "aws_platform_claude": "ws-xxxxxxxx sk-xxxxxxxxxxxxxxxx",
+const PLACEHOLDERS = {
+  "aws_platform_claude": "ws-xxxxxxxx sk-ant-xxxxxxxx\nws-yyyyyyyy sk-ant-yyyyyyyy",
   "google_vertex_gemini": '{"type":"service_account","project_id":"...","client_email":"...","private_key":"-----BEGIN RSA PRIVATE KEY-----\\n..."}',
 };
 
 // ---- State ----
 let loadedKey = null;
+let curSlug = 'openai_chatgpt';
+let curRegion = 'eu-central-1';
 
 // ---- Init ----
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
   buildTypeSelect();
-  onTypeChange();
+  buildRegionSelect();
+  updateFields();
   autoFetchKey();
+  document.addEventListener('click', e => { if (!e.target.closest('.csel')) cselCloseAll(); });
 });
 
+// ---- Build selects ----
 function buildTypeSelect() {
-  const sel = document.getElementById('typeSelect');
-  for (const grp of GROUPS) {
-    const og = document.createElement('optgroup');
-    og.label = grp.label;
-    for (const t of grp.types) {
-      const opt = document.createElement('option');
-      opt.value = t.slug;
-      opt.textContent = t.label;
-      og.appendChild(opt);
-    }
-    sel.appendChild(og);
-  }
+  const dd = document.getElementById('typeSel-dd');
+  const g = document.createElement('div');
+  g.style.padding = '4px 0';
+  TYPES_RAW.forEach(t => g.appendChild(makeOpt(t.slug, t.label, t.slug === curSlug, s => {
+    curSlug = s;
+    document.getElementById('typeSelVal').textContent = t.label;
+    document.querySelectorAll('#typeSel-dd .co').forEach(o => o.classList.toggle('sel', o.dataset.v === s));
+    cselClose('typeSel');
+    updateFields();
+  })));
+  dd.appendChild(g);
+}
+
+function buildRegionSelect() {
+  const dd = document.getElementById('regionSel-dd');
+  const g = document.createElement('div');
+  g.style.padding = '4px 0';
+  AWS_REGIONS.forEach(r => g.appendChild(makeOpt(r, r, r === curRegion, s => {
+    curRegion = s;
+    document.getElementById('regionSelVal').textContent = s;
+    document.querySelectorAll('#regionSel-dd .co').forEach(o => o.classList.toggle('sel', o.dataset.v === s));
+    cselClose('regionSel');
+  })));
+  dd.appendChild(g);
+}
+
+function makeOpt(value, label, selected, onClick) {
+  const div = document.createElement('div');
+  div.className = 'co' + (selected ? ' sel' : '');
+  div.dataset.v = value;
+  div.innerHTML = `<span>${label}</span><svg class="co-chk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+  div.addEventListener('click', e => { e.stopPropagation(); onClick(value); });
+  return div;
+}
+
+// ---- Custom select ----
+function cselToggle(id) {
+  const el = document.getElementById(id);
+  const wasOpen = el.classList.contains('open');
+  cselCloseAll();
+  if (!wasOpen) el.classList.add('open');
+}
+function cselClose(id) { document.getElementById(id).classList.remove('open'); }
+function cselCloseAll() { document.querySelectorAll('.csel.open').forEach(e => e.classList.remove('open')); }
+
+// ---- Update conditional fields ----
+function updateFields() {
+  const spec = TYPE_MAP[curSlug] || {};
+  document.getElementById('epGrp').classList.toggle('hidden', !spec.ep);
+  document.getElementById('rgGrp').classList.toggle('hidden', !spec.rg);
+  document.getElementById('fileGrp').classList.toggle('hidden', !spec.vx);
+
+  const hintEl = document.getElementById('keyHint');
+  const h = HINTS[curSlug];
+  if (h) { hintEl.textContent = h; hintEl.classList.remove('hidden'); }
+  else { hintEl.classList.add('hidden'); }
+
+  document.getElementById('apiKey').placeholder =
+    PLACEHOLDERS[curSlug] || 'Paste your API key here — one per line for batch encryption';
+  document.getElementById('keyLbl').textContent = spec.vx ? 'Service Account JSON' : 'API key';
+  document.getElementById('batchNote').style.display = spec.vx ? 'none' : '';
 }
 
 // ---- Auto key fetch ----
@@ -591,8 +469,8 @@ async function autoFetchKey() {
   setChip('loading', 'Loading…');
   try {
     const r = await fetch('https://poixe.com/security.json', {
-      signal: AbortSignal.timeout(10000),
-      headers: { 'Accept': 'application/json' },
+      signal: AbortSignal.timeout(12000),
+      headers: {'Accept': 'application/json'},
     });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const doc = await r.json();
@@ -601,205 +479,209 @@ async function autoFetchKey() {
     if (!pem) throw new Error('No PEM in response');
     if (pem.includes('REPLACE_WITH_ACTUAL')) throw new Error('Key not yet published');
     loadedKey = await parseKey(kid, pem);
-    setChip('ok', kid);
-  } catch (e) {
+    // Fingerprint: first 8 + … + last 8 hex chars
+    const fp = loadedKey.fp;
+    const fpShort = fp.slice(0, 8) + '…' + fp.slice(-8);
+    setChip('ok', `${kid}  ·  ${fpShort}`);
+  } catch(e) {
     setChip('err', 'Key unavailable — click to retry');
   }
 }
 
-// ---- UI events ----
 function onChipClick() {
-  const chip = document.getElementById('chip');
-  if (chip.classList.contains('err') || chip.classList.contains('loading')) {
+  const c = document.getElementById('chip');
+  if (c.classList.contains('ok')) {
+    window.open('https://poixe.com/security.json', '_blank', 'noopener,noreferrer');
+  } else if (c.classList.contains('err')) {
     autoFetchKey();
   }
-}
-
-function onTypeChange() {
-  const slug = document.getElementById('typeSelect').value;
-  const spec = ALL_TYPES.find(t => t.slug === slug) || {};
-
-  document.getElementById('endpointGroup').classList.toggle('hidden', !spec.endpoint);
-  document.getElementById('regionGroup').classList.toggle('hidden', !spec.region);
-  document.getElementById('fileGroup').classList.toggle('hidden', !spec.vertex);
-
-  const hintEl = document.getElementById('keyHint');
-  const hint = KEY_HINTS[slug];
-  if (hint) {
-    hintEl.textContent = hint;
-    hintEl.classList.remove('hidden');
-  } else {
-    hintEl.classList.add('hidden');
-  }
-
-  const ta = document.getElementById('apiKey');
-  ta.placeholder = KEY_PLACEHOLDER[slug] || 'Paste your API key here…';
-
-  document.getElementById('keyLabel').textContent = spec.vertex ? 'Service Account JSON' : 'API key';
-}
-
-function toggleOfflinePanel() {
-  const panel = document.getElementById('offlinePanel');
-  panel.classList.toggle('hidden');
-}
-
-// ---- Offline key load ----
-async function loadOfflineKey() {
-  const pem = document.getElementById('customPem').value.trim();
-  const kid = document.getElementById('customKid').value.trim() || 'k1';
-  const fp  = document.getElementById('customFp').value.trim();
-
-  if (!pem) { alert('Enter a PEM public key.'); return; }
-
-  try {
-    if (pem.includes('REPLACE_WITH_ACTUAL')) throw new Error('Placeholder key — use a real key');
-    const k = await parseKey(kid, pem);
-
-    if (fp) {
-      const fpNorm = fp.toLowerCase().replace(/:/g,'').replace(/\s/g,'');
-      if (fpNorm.length < 16) throw new Error('Fingerprint must be at least 16 hex chars');
-      if (!k.fingerprint.startsWith(fpNorm)) throw new Error(`Fingerprint mismatch: expected ${fpNorm}…, got ${k.fingerprint}`);
-    }
-
-    loadedKey = k;
-    setChip('ok', kid);
-    document.getElementById('offlinePanel').classList.add('hidden');
-  } catch (e) {
-    alert('Key load error: ' + e.message);
-  }
-}
-
-// ---- Vertex SA file upload ----
-function loadSAFile() {
-  const file = document.getElementById('saFile').files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    document.getElementById('apiKey').value = e.target.result.trim();
-  };
-  reader.readAsText(file);
-  document.getElementById('saFile').value = '';
 }
 
 // ---- Encrypt ----
 async function doEncrypt() {
   if (!loadedKey) {
-    showOutput('Public key not loaded. Check the status chip above.', true);
+    renderOutput(null, 'Public key not loaded. Click the status chip to retry.', true);
     return;
   }
+  const spec = TYPE_MAP[curSlug] || {};
+  const raw = document.getElementById('apiKey').value;
 
-  const slug = document.getElementById('typeSelect').value;
-  const spec = ALL_TYPES.find(t => t.slug === slug);
-  const rawKey = document.getElementById('apiKey').value.trim();
-
-  if (!rawKey) { showOutput('API key is empty.', true); return; }
+  let keys;
+  if (spec.vx) {
+    const v = raw.trim();
+    if (!v) { renderOutput(null, 'Service Account JSON is empty.', true); return; }
+    keys = [v];
+  } else {
+    keys = raw.split('\n').map(l => l.trim()).filter(Boolean);
+    if (!keys.length) { renderOutput(null, 'No keys found in input.', true); return; }
+    if (keys.length > 50) { renderOutput(null, `Too many keys (${keys.length}). Max 50 per batch.`, true); return; }
+  }
 
   const params = {};
-
-  if (spec?.endpoint) {
+  if (spec.ep) {
     const ep = document.getElementById('endpoint').value.trim();
-    if (!ep) { showOutput('Azure endpoint is required.', true); return; }
-    try { params.endpoint = normalizeAzure(ep); }
-    catch (e) { showOutput(e.message, true); return; }
+    if (!ep) { renderOutput(null, 'Azure endpoint is required.', true); return; }
+    try { params.endpoint = normAzure(ep); } catch(e) { renderOutput(null, e.message, true); return; }
   }
-
-  if (spec?.region) {
-    params.region = document.getElementById('regionSelect').value;
-  }
+  if (spec.rg) params.region = curRegion;
 
   const btn = document.getElementById('encBtn');
+  const lbl = document.getElementById('encLabel');
   btn.disabled = true;
+  lbl.textContent = keys.length > 1 ? `Encrypting ${keys.length} keys…` : 'Encrypting…';
+
   try {
-    const cipher = await seal(loadedKey.pubKey, loadedKey.kid, spec.typeInt, rawKey, params);
-    showOutput(cipher, false);
-  } catch (e) {
-    showOutput('Encryption error: ' + e.message, true);
+    const results = [];
+    for (const k of keys) results.push(await seal(loadedKey.pub, loadedKey.kid, spec.n, k, params));
+    renderOutput(results, null, false);
+  } catch(e) {
+    renderOutput(null, 'Encryption failed: ' + e.message, true);
   } finally {
     btn.disabled = false;
+    lbl.textContent = 'Encrypt';
   }
 }
 
-// ---- WebCrypto seal ----
-async function seal(pubKey, kid, typeInt, apiKey, params) {
-  const hasParams = Object.keys(params).length > 0;
-  const payload = JSON.stringify({ v:2, t:typeInt, k:apiKey, ...(hasParams ? {p:params} : {}) });
+// ---- Render output ----
+function renderOutput(results, errMsg, isErr) {
+  const wrap  = document.getElementById('outWrap');
+  const title = document.getElementById('outTitle');
+  const btns  = document.getElementById('outHdrBtns');
+  const body  = document.getElementById('outBody');
+  body.innerHTML = '';
+  btns.innerHTML = '';
 
-  const aesRaw  = crypto.getRandomValues(new Uint8Array(32));
-  const nonce   = crypto.getRandomValues(new Uint8Array(12));
-  const aad     = new TextEncoder().encode('px-egress-v2|' + kid);
+  if (isErr) {
+    title.textContent = 'Error';
+    const pre = document.createElement('pre');
+    pre.className = 'out-single err-text';
+    pre.textContent = errMsg;
+    body.appendChild(pre);
+  } else if (results.length === 1) {
+    title.textContent = '1 key encrypted';
+    const pre = document.createElement('pre');
+    pre.className = 'out-single';
+    pre.textContent = results[0];
+    body.appendChild(pre);
+    btns.appendChild(makeCopyBtn(results[0]));
+  } else {
+    title.textContent = `${results.length} keys encrypted`;
+    // JSON copy button in header
+    btns.appendChild(makeJsonCopyBtn(results));
+    // Rows
+    const rowsDiv = document.createElement('div');
+    rowsDiv.className = 'out-rows';
+    results.forEach((r, i) => {
+      const row = document.createElement('div');
+      row.className = 'out-row';
+      const num = document.createElement('span');
+      num.className = 'out-n';
+      num.textContent = i + 1;
+      const txt = document.createElement('pre');
+      txt.className = 'out-row-txt';
+      txt.textContent = r;
+      const cb = makeRowCopyBtn(r);
+      row.appendChild(num);
+      row.appendChild(txt);
+      row.appendChild(cb);
+      rowsDiv.appendChild(row);
+    });
+    body.appendChild(rowsDiv);
+  }
 
-  const aesKey = await crypto.subtle.importKey('raw', aesRaw, 'AES-GCM', false, ['encrypt']);
-  const ctBuf  = await crypto.subtle.encrypt(
-    { name:'AES-GCM', iv:nonce, additionalData:aad, tagLength:128 },
-    aesKey,
-    new TextEncoder().encode(payload)
-  );
-
-  const wrappedBuf = await crypto.subtle.encrypt({ name:'RSA-OAEP' }, pubKey, aesRaw);
-
-  const b64u = buf => btoa(String.fromCharCode(...new Uint8Array(buf)))
-    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
-
-  return `enc:v2:${kid}:${b64u(wrappedBuf)}:${b64u(nonce)}:${b64u(ctBuf)}`;
-}
-
-// ---- Key helpers ----
-function pemToBytes(pem) {
-  const b64 = pem.replace(/-----[^-]+-----/g,'').replace(/\s/g,'');
-  return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-}
-
-async function parseKey(kid, pemStr) {
-  const der = pemToBytes(pemStr);
-  const pubKey = await crypto.subtle.importKey(
-    'spki', der,
-    { name:'RSA-OAEP', hash:'SHA-256' },
-    true, ['encrypt']
-  );
-  const hashBuf = await crypto.subtle.digest('SHA-256', der);
-  const fp = Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2,'0')).join('');
-  return { kid, pubKey, fingerprint: fp };
-}
-
-// ---- Normalize Azure endpoint ----
-function normalizeAzure(raw) {
-  let u;
-  try { u = new URL(raw.trim()); } catch(_) { throw new Error('Invalid Azure endpoint URL'); }
-  if (u.protocol !== 'https:') throw new Error('Azure endpoint must be https://');
-  const host = u.host.toLowerCase();
-  const hostOnly = host.includes(':') ? host.split(':')[0] : host;
-  if (!hostOnly.endsWith('.azure.com')) throw new Error('Azure endpoint must end with .azure.com');
-  return 'https://' + host;
-}
-
-// ---- UI helpers ----
-function setChip(state, label) {
-  const chip = document.getElementById('chip');
-  chip.className = 'chip ' + state;
-  document.getElementById('chipLabel').textContent = label;
-}
-
-function showOutput(text, isErr) {
-  const wrap = document.getElementById('outWrap');
-  const pre  = document.getElementById('outText');
-  pre.textContent = text;
-  pre.className = 'out-text' + (isErr ? ' err-text' : '');
-  document.getElementById('copyBtn').style.display = isErr ? 'none' : '';
   wrap.classList.remove('hidden');
 }
 
-async function copyOutput() {
-  const text = document.getElementById('outText').textContent;
-  const btn = document.getElementById('copyBtn');
+// ---- Copy button factories ----
+function makeCopyBtn(text) {
+  const b = document.createElement('button');
+  b.className = 'cbtn';
+  b.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy`;
+  b.onclick = () => flashCopy(b, text, 'cbtn ok', 'cbtn');
+  return b;
+}
+
+function makeJsonCopyBtn(arr) {
+  const b = document.createElement('button');
+  b.className = 'cbtn';
+  b.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> Copy JSON`;
+  b.onclick = () => flashCopy(b, JSON.stringify(arr, null, 2), 'cbtn ok', 'cbtn');
+  return b;
+}
+
+function makeRowCopyBtn(text) {
+  const b = document.createElement('button');
+  b.className = 'row-cbtn';
+  b.textContent = 'Copy';
+  b.onclick = () => flashCopy(b, text, 'row-cbtn ok', 'row-cbtn', '✓', 'Copy');
+  return b;
+}
+
+async function flashCopy(btn, text, okClass, baseClass, okText, origText) {
   try {
     await navigator.clipboard.writeText(text);
-    btn.textContent = '✓ Copied';
-    btn.classList.add('copied');
+    if (okText) {
+      btn.textContent = okText;
+    } else {
+      btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied`;
+    }
+    btn.className = okClass;
     setTimeout(() => {
-      btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy`;
-      btn.classList.remove('copied');
+      btn.className = baseClass;
+      if (origText) btn.textContent = origText;
+      else btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy`;
     }, 1800);
   } catch(_) {}
+}
+
+// ---- WebCrypto seal ----
+async function seal(pub, kid, n, key, params) {
+  const hasP = Object.keys(params).length > 0;
+  const payload = JSON.stringify({v:2, t:n, k:key, ...(hasP ? {p:params} : {})});
+  const aesRaw = crypto.getRandomValues(new Uint8Array(32));
+  const nonce  = crypto.getRandomValues(new Uint8Array(12));
+  const aad    = new TextEncoder().encode('px-egress-v2|' + kid);
+  const aesK   = await crypto.subtle.importKey('raw', aesRaw, 'AES-GCM', false, ['encrypt']);
+  const ct     = await crypto.subtle.encrypt({name:'AES-GCM', iv:nonce, additionalData:aad, tagLength:128}, aesK, new TextEncoder().encode(payload));
+  const wrap   = await crypto.subtle.encrypt({name:'RSA-OAEP'}, pub, aesRaw);
+  const b = buf => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+  return `enc:v2:${kid}:${b(wrap)}:${b(nonce)}:${b(ct)}`;
+}
+
+// ---- Key parse ----
+async function parseKey(kid, pem) {
+  const der = Uint8Array.from(atob(pem.replace(/-----[^-]+-----/g,'').replace(/\s/g,'')), c => c.charCodeAt(0));
+  const pub = await crypto.subtle.importKey('spki', der, {name:'RSA-OAEP', hash:'SHA-256'}, true, ['encrypt']);
+  const hb  = await crypto.subtle.digest('SHA-256', der);
+  const fp  = Array.from(new Uint8Array(hb)).map(b => b.toString(16).padStart(2,'0')).join('');
+  return {kid, pub, fp};
+}
+
+// ---- Azure normalize ----
+function normAzure(raw) {
+  let u; try { u = new URL(raw.trim()); } catch(_) { throw new Error('Invalid Azure endpoint URL'); }
+  if (u.protocol !== 'https:') throw new Error('Azure endpoint must use https://');
+  const host = u.host.toLowerCase();
+  if (!(host.includes(':') ? host.split(':')[0] : host).endsWith('.azure.com'))
+    throw new Error('Azure endpoint host must end with .azure.com');
+  return 'https://' + host;
+}
+
+// ---- SA file load ----
+function loadSAFile() {
+  const f = document.getElementById('saFile').files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = e => { document.getElementById('apiKey').value = e.target.result.trim(); };
+  r.readAsText(f);
+  document.getElementById('saFile').value = '';
+}
+
+// ---- Chip ----
+function setChip(state, text) {
+  const c = document.getElementById('chip');
+  c.className = 'chip ' + state;
+  document.getElementById('chipText').textContent = text;
 }
 </script>
 </body>

@@ -1,11 +1,14 @@
 {
-  "schema_version": 1,
-  "updated_at": "2026-11-12T00:00:00Z",
+  "version": 1,
+  "updated_at": "2026-11-11T19:21:16Z",
   "pubkey": {
     "kid": "k1",
     "algorithm": "RSA-OAEP-SHA256+AES-256-GCM",
-    "pem": "-----BEGIN PUBLIC KEY-----\nREPLACE_WITH_ACTUAL_PUBLIC_KEY_PEM\n-----END PUBLIC KEY-----\n",
-    "fingerprint": "REPLACE_WITH_ACTUAL_SHA256_FINGERPRINT"
+    "pem": "-----BEGIN PUBLIC KEY-----\nMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEA3tjkhv0n8Vc/jNlsBjCv\n0mPyRBm0hT/GOKgmpR/o2Ptv6UOB/8hoNAvo4uwInZOQ790iKkvO1q11PF/aYCIY\nqlq5pdnO2LbMN3TdlCsK4erLzFfsxQEK80Ixky5zUCR5I/Vj2gFV9LnK07HCcWub\ncjewna34aPN6ipdNDlB+jke6z+3YeWSb2Svf7KXJbLAswSC5VqBZI85x9T7mhwsr\n995DCC7NXP1zy9RxtNDHq7ffqpRuTWcaXtIjs10Gya0hfzCemsQRE4j3kC9Ku66h\nKwdvE82ottGS/YQIsJqJrhVxnScnEBrXh3IuePta9OV1FG9apu4OCLgvin4TvYGA\nPD2bg+FWrXyhTHdz/RLmgb5ZXYdXn77W0jDwFiKQN33dECsJZ3mFa8g9agGDuWVZ\n8l9tq6eERFZR+NOekaZ5F8gZjtK8bTP6r/UQ9Ot+/OgchBD9TimSI5Q1nC46n0VM\na5ENA2oc70rFENgNgCRTYlyA6wHNmYRkX70gLTgT7vwxAgMBAAE=\n-----END PUBLIC KEY-----",
+    "fingerprint": "19bb2f0101de7bb3e1ca6fea27fa06474b37de654b0191e3430b4e30f5c6e761"
   },
-  "egress_ips": []
+  "egress_ips": [
+    "178.105.29.176",
+    "91.99.1.101"
+  ]
 }
