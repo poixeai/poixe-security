@@ -1,6 +1,6 @@
 # Channel Types
 
-Each channel type maps to a provider + model family. Use the slug string when calling the CLI or SDKs.
+Each channel type maps to a provider + model family combination. Use the slug when calling the CLI or any SDK.
 
 | Slug | Display Name | Type Int | Needs Endpoint | Needs Region |
 |---|---|:---:|:---:|:---:|
@@ -37,18 +37,30 @@ Each channel type maps to a provider + model family. Use the slug string when ca
 | `openrouter_claude` | OpenRouter Claude | 34 | | |
 | `openrouter_gemini` | OpenRouter Gemini | 35 | | |
 
-## Special Key Formats
+## Special key formats
 
-**`azure_chatgpt` / `azure_claude`** — requires `--endpoint https://your-resource.openai.azure.com` (paths and trailing slashes are stripped automatically; host must end in `.azure.com`).
+**`azure_chatgpt` / `azure_claude`** — requires `--endpoint https://your-resource.openai.azure.com`. Paths and trailing slashes are stripped automatically; the host must end in `.azure.com`.
 
-**`aws_bedrock_claude` / `aws_platform_claude`** — requires `--region <aws-region>` (default: `eu-central-1`). Valid regions: `eu-central-1`, `eu-west-1`, `eu-west-2`, `us-east-1`, `us-east-2`, `us-west-2`.
+**`aws_bedrock_claude` / `aws_platform_claude`** — requires `--region <aws-region>`. Supported regions: `eu-central-1`, `eu-west-1`, `eu-west-2`, `us-east-1`, `us-east-2`, `us-west-2`.
 
-**`aws_platform_claude`** — the API key value must be `workspace_id api_key` (two tokens separated by a single space).
+**`aws_platform_claude`** — the key value must be `workspace_id api_key` (two tokens separated by a single space).
 
-**`google_vertex_gemini`** — the API key is the entire Service Account JSON file content (must contain `project_id`, `client_email`, `private_key`).
+**`google_vertex_gemini`** — the key is the full Service Account JSON content (must include `project_id`, `client_email`, `private_key`).
 
-## Listing Types via CLI
+## Listing types via CLI
 
 ```sh
 poixe meta --types
 ```
+
+## Keeping up to date
+
+When Poixe adds support for new channel types, the type integer must be part of the encrypted payload. **Clients on older versions will not have the new constants.** Update before encrypting keys for newly added channel types:
+
+```sh
+poixe update                                                 # CLI
+go get github.com/poixeai/poixe-security/sdk/go@latest      # Go
+pip install -U poixe-encrypt                                 # Python
+```
+
+The HTML tool always reflects the latest channel list when loaded from the repository.
