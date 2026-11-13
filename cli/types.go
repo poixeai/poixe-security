@@ -12,7 +12,7 @@ import (
 type channelSpec struct {
 	TypeInt       int
 	DisplayName   string
-	NeedsEndpoint bool // azure types: requires --endpoint
+	NeedsEndpoint bool // azure: per-line input format is "endpoint apikey"
 	NeedsRegion   bool // aws types: requires --region (default: eu-central-1)
 	IsVertex      bool // google_vertex_gemini: key is SA JSON file
 	IsAWSPlatform bool // aws_platform_claude: key format "workspace_id api_key"
@@ -107,7 +107,7 @@ func printTypeTable(w io.Writer) {
 		extra := ""
 		switch {
 		case spec.NeedsEndpoint:
-			extra = "[--endpoint required]"
+			extra = "[key format: endpoint apikey]"
 		case spec.NeedsRegion && spec.IsAWSPlatform:
 			extra = "[--region, default: " + defaultAWSRegion + "; key: workspace_id api_key]"
 		case spec.NeedsRegion:

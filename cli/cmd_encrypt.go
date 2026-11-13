@@ -27,7 +27,6 @@ func runEncrypt(args []string) {
 	var keyFiles stringSlice
 	typSlug := fs.String("type", "", "channel type slug (required), e.g. openai_chatgpt")
 	fs.StringVar(typSlug, "t", "", "channel type slug (shorthand)")
-	endpoint := fs.String("endpoint", "", "Azure endpoint URL, e.g. https://my-resource.openai.azure.com")
 	region := fs.String("region", defaultAWSRegion, "AWS region (aws_bedrock_claude / aws_platform_claude)")
 	fingerprint := fs.String("fingerprint", "", "expected pubkey fingerprint prefix (hex, >= 16 chars)")
 	pubkeyURL := fs.String("pubkey-url", defaultPubkeyURL, "public key URL")
@@ -53,20 +52,6 @@ func runEncrypt(args []string) {
 	}
 
 	// --- Validate type-specific flags ---
-	var azureEndpoint string
-	if spec.NeedsEndpoint {
-		if *endpoint == "" {
-			fmt.Fprintf(os.Stderr, "error: --endpoint is required for type %q\n", *typSlug)
-			os.Exit(2)
-		}
-		var err error
-		azureEndpoint, err = normalizeAzureEndpoint(*endpoint)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "error: %v\n", err)
-			os.Exit(2)
-		}
-	}
-
 	if spec.NeedsRegion {
 		if !isValidAWSRegion(*region) {
 			fmt.Fprintf(os.Stderr, "error: invalid --region %q\nvalid values: %s\n",
@@ -116,7 +101,7 @@ func runEncrypt(args []string) {
 	// --- Encrypt ---
 	for i, inp := range inputs {
 		ep := envelopeParams{
-			Endpoint: azureEndpoint,
+			Endpoint: inp.endpoint,
 		}
 		if spec.NeedsRegion {
 			ep.Region = *region
@@ -132,7 +117,8 @@ func runEncrypt(args []string) {
 }
 
 type parsedInput struct {
-	key string
+	key      string
+	endpoint string // non-empty for Azure (NeedsEndpoint types)
 }
 
 // readInputs reads and validates key inputs.
@@ -208,6 +194,23 @@ func readInputs(keyFiles stringSlice, spec channelSpec) ([]parsedInput, error) {
 				return nil, fmt.Errorf("key #%d: compact JSON: %w", n, err)
 			}
 			out = append(out, parsedInput{key: string(compacted)})
+
+		case spec.NeedsEndpoint:
+			// Azure format: "endpoint apikey" (space-separated).
+			// Splitting at the first space allows the endpoint to be the full URL.
+			idx := strings.Index(raw, " ")
+			if idx < 0 {
+				return nil, fmt.Errorf("key #%d: azure expects \"endpoint apikey\" (two space-separated tokens, e.g. https://my-resource.openai.azure.com sk-...)", n)
+			}
+			ep, err := normalizeAzureEndpoint(raw[:idx])
+			if err != nil {
+				return nil, fmt.Errorf("key #%d: %w", n, err)
+			}
+			apiKey := strings.TrimSpace(raw[idx+1:])
+			if apiKey == "" {
+				return nil, fmt.Errorf("key #%d: api key is empty after endpoint", n)
+			}
+			out = append(out, parsedInput{key: apiKey, endpoint: ep})
 
 		case spec.IsAWSPlatform:
 			// Format: "workspace_id api_key"

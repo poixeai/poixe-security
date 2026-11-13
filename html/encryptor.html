@@ -390,12 +390,6 @@ MIIBojANBgkq...
     </div>
   </div>
 
-  <div class="fg hidden" id="epGrp">
-    <label>Azure endpoint</label>
-    <input class="inp" id="endpoint" type="text" placeholder="https://my-resource.openai.azure.com" autocomplete="off" spellcheck="false">
-    <div class="hint">Base URL only — must end with .azure.com</div>
-  </div>
-
   <div class="fg hidden" id="rgGrp">
     <label>AWS region</label>
     <div class="csel" id="regionSel">
@@ -508,10 +502,14 @@ const TYPES_RAW = [
 const TYPE_MAP = Object.fromEntries(TYPES_RAW.map(t => [t.slug, t]));
 const AWS_REGIONS = ['eu-central-1','eu-west-1','eu-west-2','us-east-1','us-east-2','us-west-2'];
 const HINTS = {
+  "azure_chatgpt":      "Format: endpoint apikey (space-separated) — one pair per line for batch, e.g.:\nhttps://my-resource.openai.azure.com sk-...",
+  "azure_claude":       "Format: endpoint apikey (space-separated) — one pair per line for batch, e.g.:\nhttps://my-resource.openai.azure.com sk-...",
   "aws_platform_claude": "Format: workspace_id api_key (space-separated) — one pair per line for batch",
   "google_vertex_gemini": "Paste Service Account JSON — single key only, or use file upload above",
 };
 const PLACEHOLDERS = {
+  "azure_chatgpt":      "https://resource-a.openai.azure.com sk-aaaa...\nhttps://resource-b.openai.azure.com sk-bbbb...",
+  "azure_claude":       "https://resource-a.openai.azure.com sk-aaaa...\nhttps://resource-b.openai.azure.com sk-bbbb...",
   "aws_platform_claude": "ws-xxxxxxxx sk-ant-xxxxxxxx\nws-yyyyyyyy sk-ant-yyyyyyyy",
   "google_vertex_gemini": '{"type":"service_account","project_id":"...","client_email":"...","private_key":"-----BEGIN RSA PRIVATE KEY-----\\n..."}',
 };
@@ -803,7 +801,6 @@ function cselCloseAll() { document.querySelectorAll('.csel.open').forEach(e => e
 // ---- Update conditional fields ----
 function updateFields() {
   const spec = TYPE_MAP[curSlug] || {};
-  document.getElementById('epGrp').classList.toggle('hidden', !spec.ep);
   document.getElementById('rgGrp').classList.toggle('hidden', !spec.rg);
   document.getElementById('fileGrp').classList.toggle('hidden', !spec.vx);
   const hintEl = document.getElementById('keyHint');
@@ -830,6 +827,21 @@ async function doEncrypt() {
     const v = raw.trim();
     if (!v) { renderOutput(null, 'Service Account JSON is empty.', true); return; }
     keys = [v];
+  } else if (spec.ep) {
+    // Azure: each line is "endpoint apikey"
+    const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+    if (!lines.length) { renderOutput(null, 'No keys found in input.', true); return; }
+    if (lines.length > 50) { renderOutput(null, `Too many keys (${lines.length}). Max 50 per batch.`, true); return; }
+    keys = [];
+    for (let i = 0; i < lines.length; i++) {
+      const idx = lines[i].indexOf(' ');
+      if (idx < 0) { renderOutput(null, `Line ${i+1}: expected "endpoint apikey" (space-separated)`, true); return; }
+      let ep;
+      try { ep = normAzure(lines[i].slice(0, idx)); } catch(e) { renderOutput(null, `Line ${i+1}: ${e.message}`, true); return; }
+      const apiKey = lines[i].slice(idx+1).trim();
+      if (!apiKey) { renderOutput(null, `Line ${i+1}: api key is empty after endpoint`, true); return; }
+      keys.push({endpoint: ep, key: apiKey});
+    }
   } else {
     keys = raw.split('\n').map(l => l.trim()).filter(Boolean);
     if (!keys.length) { renderOutput(null, 'No keys found in input.', true); return; }
@@ -837,11 +849,6 @@ async function doEncrypt() {
   }
 
   const params = {};
-  if (spec.ep) {
-    const ep = document.getElementById('endpoint').value.trim();
-    if (!ep) { renderOutput(null, 'Azure endpoint is required.', true); return; }
-    try { params.endpoint = normAzure(ep); } catch(e) { renderOutput(null, e.message, true); return; }
-  }
   if (spec.rg) params.region = curRegion;
 
   const btn = document.getElementById('encBtn');
@@ -851,7 +858,17 @@ async function doEncrypt() {
 
   try {
     const results = [];
-    for (const k of keys) results.push(await seal(loadedKey.pub, loadedKey.kid, spec.n, k, params));
+    for (const k of keys) {
+      let p = params;
+      if (spec.ep) {
+        // Azure: each entry is already {endpoint, key}
+        const ep = k.endpoint;
+        const apiKey = k.key;
+        results.push(await seal(loadedKey.pub, loadedKey.kid, spec.n, apiKey, {endpoint: ep}));
+      } else {
+        results.push(await seal(loadedKey.pub, loadedKey.kid, spec.n, k, p));
+      }
+    }
     renderOutput(results, null, false);
   } catch(e) {
     renderOutput(null, 'Encryption failed: ' + e.message, true);

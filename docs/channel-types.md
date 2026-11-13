@@ -39,7 +39,20 @@ Each channel type maps to a provider + model family combination. Use the slug wh
 
 ## Special key formats
 
-**`azure_chatgpt` / `azure_claude`** — requires `--endpoint https://your-resource.openai.azure.com`. Paths and trailing slashes are stripped automatically; the host must end in `.azure.com`.
+**`azure_chatgpt` / `azure_claude`** — the Azure endpoint URL is bound into each encrypted envelope, so each key can point to a different Azure resource.
+
+- **CLI:** each input line must be `endpoint apikey` (space-separated). No `--endpoint` flag is used; this allows mixing different endpoints in one batch:
+
+  ```sh
+  printf 'https://resource-a.openai.azure.com sk-aaa...\nhttps://resource-b.openai.azure.com sk-bbb...' \
+    | poixe encrypt -t azure_chatgpt
+  ```
+
+- **SDKs (Go / Python):** pass the endpoint per `Encrypt` call via `WithEndpoint(...)` / `endpoint=...`. Each call produces one envelope with that endpoint bound in.
+
+- **HTML tool:** in the textarea, each line is `endpoint apikey` (same format as CLI).
+
+The endpoint host must end with `.azure.com` and the scheme must be `https`. Paths and trailing slashes are stripped automatically.
 
 **`aws_bedrock_claude` / `aws_platform_claude`** — requires `--region <aws-region>`. Supported regions: `eu-central-1`, `eu-west-1`, `eu-west-2`, `us-east-1`, `us-east-2`, `us-west-2`.
 

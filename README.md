@@ -95,9 +95,9 @@ Self-updates to the latest GitHub release, verifies the SHA-256 checksum, and re
 # Basic
 echo "sk-proj-..." | poixe encrypt -t openai_chatgpt
 
-# Azure (requires endpoint)
-echo "my-azure-key" | poixe encrypt -t azure_chatgpt \
-  --endpoint https://my-resource.openai.azure.com
+# Azure — each line is "endpoint apikey"; supports mixed endpoints in one batch
+printf 'https://resource-a.openai.azure.com sk-aaa...\nhttps://resource-b.openai.azure.com sk-bbb...' \
+  | poixe encrypt -t azure_chatgpt
 
 # AWS Bedrock (requires region)
 echo "AKID..." | poixe encrypt -t aws_bedrock_claude \
