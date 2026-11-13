@@ -13,6 +13,8 @@ Poixe operates as an egress layer between vendors and upstream model APIs. The s
 - **Plaintext keys never reach Poixe application servers.** Keys are encrypted on the client using the Poixe public key before any network request is made. The application backend only ever sees and stores the `enc:v2:...` ciphertext.
 - **Decryption happens only in the egress layer.** The isolated, high-trust egress machines are the sole environment where keys are decrypted — at the moment an upstream API call is dispatched. No other system component has access.
 
+> **Quick start:** Use the [online browser encryption tool](https://poixeai.github.io/poixe-security/html/encryptor.html) to encrypt a channel key without installing anything.
+
 ## Adding a channel API key
 
 There are two ways to submit a channel API key to Poixe:
@@ -32,7 +34,7 @@ The [Poixe System API](https://docs.poixe.com/cn/api-reference/system-api/overvi
 | [CLI](#cli) | Shell scripts, CI/CD pipelines, one-shot use |
 | [Go SDK](#go-sdk) | Go applications |
 | [Python SDK](#python-sdk) | Python applications and scripts |
-| [HTML tool](#html-tool) | Browser-based, no install, works fully offline after page load |
+| [HTML tool](#html-tool) | Browser-based encryption; no install required |
 
 ## Public key
 
@@ -200,9 +202,13 @@ pip install -U poixe-encrypt
 
 ## HTML tool
 
-Open `html/encryptor.html` in any modern browser — no server, no install. The page uses the browser's native WebCrypto API; the key never leaves your machine.
+**[Open the online encryption tool](https://poixeai.github.io/poixe-security/html/encryptor.html)** — no installation required.
 
-The tool supports all channel types including batch encryption (multiple keys at once). It fetches `https://poixe.com/security.json` for the public key on load, and can also work with a custom URL or a pasted PEM for air-gapped / local environments.
+The online version is hosted on GitHub Pages directly from this repository, with its source code available for inspection. Encryption runs locally in your browser using the native WebCrypto API; plaintext API keys are never uploaded. The page fetches the public key from `https://poixe.com/security.json` and displays its fingerprint for verification.
+
+The tool supports all channel types, including batch encryption.
+
+For higher security requirements, download [`html/encryptor.html`](html/encryptor.html) and use it locally while disconnected from the network. Obtain and independently verify the public key beforehand, then paste its PEM into the tool's key-source settings. See [Public key verification](docs/verification.md) for verification steps.
 
 ---
 
